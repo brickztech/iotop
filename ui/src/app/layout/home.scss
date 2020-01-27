@@ -61,9 +61,9 @@ md-sidenav.tb-site-sidenav {
   width: 250px;
 }
 
-md-icon.tb-logo-title {
+img.tb-logo-title {
   width: 200px;
-  height: 36px;
+  max-width: 125px;
 }
 
 .tb-nav-header {
@@ -80,6 +80,7 @@ md-icon.tb-logo-title {
 
   .md-toolbar-tools {
     flex-basis: auto;
+    align-items: center;
   }
 }
 
@@ -93,4 +94,10 @@ md-icon.tb-logo-title {
 
 .tb-entity-search {
   margin-top: 34px;
+}
+
+.tb-title {
+  margin-left: 15px;
+  font-size: 24px !important;
+  font-weight: 500 !important;
 }
