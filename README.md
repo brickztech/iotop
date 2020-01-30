@@ -4,7 +4,9 @@
 
 ThingsBoard is an open-source IoT platform for data collection, processing, visualization, and device management.
 
+<!--
 <img src="./img/logo.png?raw=true" width="100" height="100">
+-->
 
 ## Documentation
 
