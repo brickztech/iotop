@@ -19,14 +19,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.thingsboard</groupId>
-        <version>2.5.0-SNAPSHOT</version>
-        <artifactId>thingsboard</artifactId>
+        <groupId>com.brickztech</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+        <artifactId>iotop</artifactId>
     </parent>
     <artifactId>dao</artifactId>
     <packaging>jar</packaging>
 
-    <name>Thingsboard Server DAO Layer</name>
+    <name>IoToP Server DAO Layer</name>
     <url>https://thingsboard.io</url>
 
     <properties>
@@ -36,19 +36,19 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.thingsboard.common</groupId>
+            <groupId>com.brickztech.common</groupId>
             <artifactId>data</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.thingsboard.common</groupId>
+            <groupId>com.brickztech.common</groupId>
             <artifactId>message</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.thingsboard.common</groupId>
+            <groupId>com.brickztech.common</groupId>
             <artifactId>dao-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.thingsboard.common</groupId>
+            <groupId>com.brickztech.common</groupId>
             <artifactId>util</artifactId>
         </dependency>
         <dependency>

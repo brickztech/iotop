@@ -19,17 +19,17 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.thingsboard</groupId>
-        <version>2.5.0-SNAPSHOT</version>
+        <groupId>com.brickztech</groupId>
+        <version>1.0.0-SNAPSHOT</version>
         <artifactId>msa</artifactId>
     </parent>
-    <groupId>org.thingsboard.msa</groupId>
+    <groupId>com.brickztech.msa</groupId>
     <artifactId>tb</artifactId>
     <packaging>pom</packaging>
 
-    <name>ThingsBoard Docker Images</name>
+    <name>IoToP Docker Images</name>
     <url>https://thingsboard.io</url>
-    <description>ThingsBoard Docker Images</description>
+    <description>IoToP Docker Images</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -45,7 +45,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.thingsboard</groupId>
+            <groupId>com.brickztech</groupId>
             <artifactId>application</artifactId>
             <version>${project.version}</version>
             <classifier>deb</classifier>
@@ -69,7 +69,7 @@
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
-                                    <groupId>org.thingsboard</groupId>
+                                    <groupId>com.brickztech</groupId>
                                     <artifactId>application</artifactId>
                                     <classifier>deb</classifier>
                                     <type>deb</type>
@@ -88,7 +88,7 @@
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
-                                    <groupId>org.thingsboard</groupId>
+                                    <groupId>com.brickztech</groupId>
                                     <artifactId>application</artifactId>
                                     <classifier>deb</classifier>
                                     <type>deb</type>
@@ -107,7 +107,7 @@
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
-                                    <groupId>org.thingsboard</groupId>
+                                    <groupId>com.brickztech</groupId>
                                     <artifactId>application</artifactId>
                                     <classifier>deb</classifier>
                                     <type>deb</type>

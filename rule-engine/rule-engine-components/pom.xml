@@ -21,15 +21,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.thingsboard</groupId>
-        <version>2.5.0-SNAPSHOT</version>
+        <groupId>com.brickztech</groupId>
+        <version>1.0.0-SNAPSHOT</version>
         <artifactId>rule-engine</artifactId>
     </parent>
-    <groupId>org.thingsboard.rule-engine</groupId>
+    <groupId>com.brickztech.rule-engine</groupId>
     <artifactId>rule-engine-components</artifactId>
     <packaging>jar</packaging>
 
-    <name>Thingsboard Rule Engine Components</name>
+    <name>IoToP Rule Engine Components</name>
     <url>https://thingsboard.io</url>
 
     <properties>
@@ -42,17 +42,17 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.thingsboard.common</groupId>
+            <groupId>com.brickztech.common</groupId>
             <artifactId>util</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.thingsboard</groupId>
+            <groupId>com.brickztech</groupId>
             <artifactId>dao</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.thingsboard.common.transport</groupId>
+            <groupId>com.brickztech.common.transport</groupId>
             <artifactId>transport-api</artifactId>
             <scope>provided</scope>
         </dependency>
@@ -67,11 +67,11 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.thingsboard.rule-engine</groupId>
+            <groupId>com.brickztech.rule-engine</groupId>
             <artifactId>rule-engine-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.thingsboard</groupId>
+            <groupId>com.brickztech</groupId>
             <artifactId>netty-mqtt</artifactId>
         </dependency>
         <dependency>

@@ -19,14 +19,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.thingsboard</groupId>
-        <version>2.5.0-SNAPSHOT</version>
-        <artifactId>thingsboard</artifactId>
+        <groupId>com.brickztech</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+        <artifactId>iotop</artifactId>
     </parent>
     <artifactId>application</artifactId>
     <packaging>jar</packaging>
 
-    <name>ThingsBoard Server Application</name>
+    <name>IoToP Server Application</name>
     <url>https://thingsboard.io</url>
     <description>Open-source IoT Platform - Device management, data collection, processing and visualization
     </description>
@@ -53,43 +53,43 @@
             <classifier>linux-x86_64</classifier>
         </dependency>
         <dependency>
-            <groupId>org.thingsboard.common</groupId>
+            <groupId>com.brickztech.common</groupId>
             <artifactId>util</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.thingsboard.rule-engine</groupId>
+            <groupId>com.brickztech.rule-engine</groupId>
             <artifactId>rule-engine-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.thingsboard.rule-engine</groupId>
+            <groupId>com.brickztech.rule-engine</groupId>
             <artifactId>rule-engine-components</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.thingsboard.common.transport</groupId>
+            <groupId>com.brickztech.common.transport</groupId>
             <artifactId>transport-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.thingsboard.common.transport</groupId>
+            <groupId>com.brickztech.common.transport</groupId>
             <artifactId>mqtt</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.thingsboard.common.transport</groupId>
+            <groupId>com.brickztech.common.transport</groupId>
             <artifactId>http</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.thingsboard.common.transport</groupId>
+            <groupId>com.brickztech.common.transport</groupId>
             <artifactId>coap</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.thingsboard</groupId>
+            <groupId>com.brickztech</groupId>
             <artifactId>dao</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.thingsboard.common</groupId>
+            <groupId>com.brickztech.common</groupId>
             <artifactId>queue</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.thingsboard</groupId>
+            <groupId>com.brickztech</groupId>
             <artifactId>dao</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
@@ -115,7 +115,7 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.thingsboard</groupId>
+            <groupId>com.brickztech</groupId>
             <artifactId>ui</artifactId>
             <version>${project.version}</version>
             <scope>runtime</scope>
@@ -216,7 +216,7 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.thingsboard</groupId>
+            <groupId>com.brickztech</groupId>
             <artifactId>tools</artifactId>
             <scope>test</scope>
         </dependency>
