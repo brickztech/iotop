@@ -35,9 +35,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <main.dir>${basedir}/../..</main.dir>
         <pkg.name>thingsboard</pkg.name>
-        <tb.docker.name>tb</tb.docker.name>
-        <tb-postgres.docker.name>tb-postgres</tb-postgres.docker.name>
-        <tb-cassandra.docker.name>tb-cassandra</tb-cassandra.docker.name>
+        <tb.docker.name>iotop</tb.docker.name>
+        <tb-postgres.docker.name>iotop-postgres</tb-postgres.docker.name>
+        <tb-cassandra.docker.name>iotop-cassandra</tb-cassandra.docker.name>
         <pkg.user>thingsboard</pkg.user>
         <pkg.installFolder>/usr/share/${pkg.name}</pkg.installFolder>
         <pkg.upgradeVersion>2.4.2</pkg.upgradeVersion>
