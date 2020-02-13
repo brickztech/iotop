@@ -30,6 +30,7 @@ import thingsboardWebCameraInputWidget from '../widget/lib/web-camera-input-widg
 import thingsboardRpcWidgets from '../widget/lib/rpc';
 
 import TbFlot from '../widget/lib/flot-widget';
+import IotopFlot from '../widget/lib/flot-widget_iotop';
 import TbAnalogueLinearGauge from '../widget/lib/analogue-linear-gauge';
 import TbAnalogueRadialGauge from '../widget/lib/analogue-radial-gauge';
 import TbAnalogueCompass from '../widget/lib/analogue-compass';
@@ -57,7 +58,7 @@ export default angular.module('thingsboard.api.widget', ['oc.lazyLoad', thingsbo
     .name;
 
 /*@ngInject*/
-function WidgetService($rootScope, $http, $q, $filter, $ocLazyLoad, $window, $translate, types, utils) {
+function WidgetService($rootScope, $http, $q, $filter, $ocLazyLoad, $window, $log, $translate, types, utils) {
 
     $window.$ = $;
     $window.jQuery = $;
@@ -66,6 +67,7 @@ function WidgetService($rootScope, $http, $q, $filter, $ocLazyLoad, $window, $tr
     $window.lazyLoad = $ocLazyLoad;
 
     $window.TbFlot = TbFlot;
+    $window.IotopFlot = IotopFlot($log);
     $window.TbAnalogueLinearGauge = TbAnalogueLinearGauge;
     $window.TbAnalogueRadialGauge = TbAnalogueRadialGauge;
     $window.TbAnalogueCompass = TbAnalogueCompass;
