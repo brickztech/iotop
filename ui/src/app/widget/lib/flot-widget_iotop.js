@@ -466,6 +466,8 @@ class IotopFlot {
     }
 
     init($element, subscription) {
+        $log.log("init");
+
         this.subscription = subscription;
         this.$element = $element;
         var colors = [];
@@ -666,21 +668,12 @@ class IotopFlot {
         }
 
         if (this.subscription) {
-
-            $log.log('update() initiated');
-
-            $log.log("Data 1: " + this.subscription.data[0].data);
-            $log.log("Data 2: " + this.subscription.data[1].data);
-            $log.log("Data 3: " + this.subscription.data[2].data);
-
             var minLength = this.subscription.data[0].data.length;
             for (var m = 1; m < this.subscription.data.length; m++) {
                 if(this.subscription.data[m].data.length < minLength) {
                     minLength = this.subscription.data[m].data.length;
                 }
             }
-
-            $log.log("Min length:" + minLength);
             
             var total = 0;
             var newData = [];
@@ -688,21 +681,11 @@ class IotopFlot {
                 var sum = 0;
                 var timestamp = this.subscription.data[0].data[l][0];
                 for (var j = 0; j < this.subscription.data.length; j++) {
-                    $log.log(this.subscription.data[j].data[l][1]);
                     sum += this.subscription.data[j].data[l][1];
-
                 }
                 newData.push([timestamp, sum]);
                 total += sum;
             }
-            
-            // kell új subscription-t csinálni, amit használhat a többi utána, csak 1 datasource-al
-            this.subscription.data.push(newData);
-
-            $log.log("Data 1: " + this.subscription.data[0].data);
-            $log.log("Data 2: " + this.subscription.data[1].data);
-            $log.log("Data 3: " + this.subscription.data[2].data);
-
 
             this.ctx.total = Math.round(total * 100) / 100;
 
@@ -711,13 +694,12 @@ class IotopFlot {
 
                     var axisVisibilityChanged = false;
                     if (this.yaxis) {
-                        for (var i = 0; i < this.subscription.data.length; i++) {
-                            var series = this.subscription.data[i];
-                            var yaxisIndex = series.yaxisIndex;
-                            if (this.yaxes[yaxisIndex].keysInfo[i].hidden != series.dataKey.hidden) {
-                                this.yaxes[yaxisIndex].keysInfo[i].hidden = series.dataKey.hidden;
-                                axisVisibilityChanged = true;
-                            }
+                        var series = angular.copy(this.subscription.data[0], series);
+                        series.data = newData;
+                        var yaxisIndex = series.yaxisIndex;
+                        if (this.yaxes[yaxisIndex].keysInfo[0].hidden != series.dataKey.hidden) {
+                            this.yaxes[yaxisIndex].keysInfo[0].hidden = series.dataKey.hidden;
+                            axisVisibilityChanged = true;
                         }
                         if (axisVisibilityChanged) {
                             this.options.yaxes.length = 0;
@@ -778,13 +760,13 @@ class IotopFlot {
                                 this.ctx.plot.getOptions().series.bars.barWidth = this.subscription.timeWindow.interval * 0.6;
                             }
                         }
-                        this.updateData();
+                        this.updateData(newData);
                     }
                 } else if (this.chartType === 'pie') {
                     if (this.ctx.animatedPie) {
                         this.nextPieDataAnimation(true);
                     } else {
-                        this.updateData();
+                        this.updateData(newData);
                     }
                 }
             } else if (this.isMouseInteraction && this.ctx.plot){
@@ -796,8 +778,13 @@ class IotopFlot {
         }
     }
 
-    updateData() {
-        this.ctx.plot.setData(this.subscription.data);
+    updateData(newData) {
+        var copy = angular.copy(this.subscription.data, copy);
+        for (var c = this.subscription.data.length-1; c > 0; c--) {
+            copy.pop();
+        }
+        copy[0].data = newData;
+        this.ctx.plot.setData(copy);
         if (this.chartType !== 'pie') {
             this.ctx.plot.setupGrid();
         }
