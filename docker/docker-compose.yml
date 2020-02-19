@@ -43,7 +43,7 @@ services:
   tb-js-executor:
     restart: always
     image: "${DOCKER_REPO}/${JS_EXECUTOR_DOCKER_NAME}:${TB_VERSION}"
-    scale: 20
+    scale: 4
     env_file:
       - tb-js-executor.env
     depends_on:
@@ -70,28 +70,6 @@ services:
       - kafka
       - redis
       - tb-js-executor
-  tb2:
-    restart: always
-    image: "${DOCKER_REPO}/${TB_NODE_DOCKER_NAME}:${TB_VERSION}"
-    ports:
-      - "8080"
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "200m"
-        max-file: "30"
-    environment:
-      TB_HOST: tb2
-      CLUSTER_NODE_ID: tb2
-    env_file:
-      - tb-node.env
-    volumes:
-      - ./tb-node/conf:/config
-      - ./tb-node/log:/var/log/thingsboard
-    depends_on:
-      - kafka
-      - redis
-      - tb-js-executor
   tb-mqtt-transport1:
     restart: always
     image: "${DOCKER_REPO}/${MQTT_TRANSPORT_DOCKER_NAME}:${TB_VERSION}"
@@ -107,21 +85,6 @@ services:
       - ./tb-transports/mqtt/log:/var/log/tb-mqtt-transport
     depends_on:
       - kafka
-  tb-mqtt-transport2:
-    restart: always
-    image: "${DOCKER_REPO}/${MQTT_TRANSPORT_DOCKER_NAME}:${TB_VERSION}"
-    ports:
-      - "1883"
-    environment:
-      TB_HOST: tb-mqtt-transport2
-      CLUSTER_NODE_ID: tb-mqtt-transport2
-    env_file:
-      - tb-mqtt-transport.env
-    volumes:
-      - ./tb-transports/mqtt/conf:/config
-      - ./tb-transports/mqtt/log:/var/log/tb-mqtt-transport
-    depends_on:
-      - kafka
   tb-http-transport1:
     restart: always
     image: "${DOCKER_REPO}/${HTTP_TRANSPORT_DOCKER_NAME}:${TB_VERSION}"
@@ -130,21 +93,6 @@ services:
     environment:
       TB_HOST: tb-http-transport1
       CLUSTER_NODE_ID: tb-http-transport1
-    env_file:
-      - tb-http-transport.env
-    volumes:
-      - ./tb-transports/http/conf:/config
-      - ./tb-transports/http/log:/var/log/tb-http-transport
-    depends_on:
-      - kafka
-  tb-http-transport2:
-    restart: always
-    image: "${DOCKER_REPO}/${HTTP_TRANSPORT_DOCKER_NAME}:${TB_VERSION}"
-    ports:
-      - "8081"
-    environment:
-      TB_HOST: tb-http-transport2
-      CLUSTER_NODE_ID: tb-http-transport2
     env_file:
       - tb-http-transport.env
     volumes:
@@ -174,13 +122,6 @@ services:
       - "8080"
     env_file:
       - tb-web-ui.env
-  tb-web-ui2:
-    restart: always
-    image: "${DOCKER_REPO}/${WEB_UI_DOCKER_NAME}:${TB_VERSION}"
-    ports:
-      - "8080"
-    env_file:
-      - tb-web-ui.env
   haproxy:
     restart: always
     container_name: "${LOAD_BALANCER_NAME}"
@@ -203,10 +144,6 @@ services:
       FORCE_HTTPS_REDIRECT: "false"
     links:
         - tb1
-        - tb2
         - tb-web-ui1
-        - tb-web-ui2
         - tb-mqtt-transport1
-        - tb-mqtt-transport2
         - tb-http-transport1
-        - tb-http-transport2

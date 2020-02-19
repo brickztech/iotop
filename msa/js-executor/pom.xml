@@ -19,15 +19,15 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.thingsboard</groupId>
-        <version>2.5.0-SNAPSHOT</version>
+        <groupId>com.brickztech</groupId>
+        <version>1.0.0-SNAPSHOT</version>
         <artifactId>msa</artifactId>
     </parent>
-    <groupId>org.thingsboard.msa</groupId>
+    <groupId>com.brickztech.msa</groupId>
     <artifactId>js-executor</artifactId>
     <packaging>pom</packaging>
 
-    <name>ThingsBoard JavaScript Executor Microservice</name>
+    <name>IoToP JavaScript Executor Microservice</name>
     <url>https://thingsboard.io</url>
     <description>Service executing JavaScript functions in sandboxed environment</description>
 
@@ -35,7 +35,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <main.dir>${basedir}/../..</main.dir>
         <pkg.name>tb-js-executor</pkg.name>
-        <docker.name>tb-js-executor</docker.name>
+        <docker.name>iotop-js-executor</docker.name>
         <pkg.user>thingsboard</pkg.user>
         <pkg.unixLogFolder>/var/log/${pkg.name}</pkg.unixLogFolder>
         <pkg.installFolder>/usr/share/${pkg.name}</pkg.installFolder>

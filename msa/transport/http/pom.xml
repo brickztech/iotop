@@ -19,23 +19,23 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.thingsboard.msa</groupId>
-        <version>2.5.0-SNAPSHOT</version>
+        <groupId>com.brickztech.msa</groupId>
+        <version>1.0.0-SNAPSHOT</version>
         <artifactId>transport</artifactId>
     </parent>
-    <groupId>org.thingsboard.msa.transport</groupId>
+    <groupId>com.brickztech.msa.transport</groupId>
     <artifactId>http</artifactId>
     <packaging>pom</packaging>
 
-    <name>ThingsBoard HTTP Transport Microservice</name>
+    <name>IoToP HTTP Transport Microservice</name>
     <url>https://thingsboard.io</url>
-    <description>ThingsBoard HTTP Transport Microservice</description>
+    <description>IoToP HTTP Transport Microservice</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <main.dir>${basedir}/../../..</main.dir>
         <pkg.name>tb-http-transport</pkg.name>
-        <docker.name>tb-http-transport</docker.name>
+        <docker.name>iotop-http-transport</docker.name>
         <pkg.user>thingsboard</pkg.user>
         <pkg.logFolder>/var/log/${pkg.name}</pkg.logFolder>
         <pkg.installFolder>/usr/share/${pkg.name}</pkg.installFolder>
@@ -43,7 +43,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.thingsboard.transport</groupId>
+            <groupId>com.brickztech.transport</groupId>
             <artifactId>http</artifactId>
             <version>${project.version}</version>
             <classifier>deb</classifier>
@@ -67,7 +67,7 @@
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
-                                    <groupId>org.thingsboard.transport</groupId>
+                                    <groupId>com.brickztech.transport</groupId>
                                     <artifactId>http</artifactId>
                                     <classifier>deb</classifier>
                                     <type>deb</type>
