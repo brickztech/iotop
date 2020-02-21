@@ -668,20 +668,25 @@ class IotopFlot {
         }
 
         if (this.subscription) {
-            var minLength = this.subscription.data[0].data.length;
+
+            var maxLength = this.subscription.data[0].data.length;
+            var maxData = 0;
             for (var m = 1; m < this.subscription.data.length; m++) {
-                if(this.subscription.data[m].data.length < minLength) {
-                    minLength = this.subscription.data[m].data.length;
+                if(this.subscription.data[m].data.length > maxLength) {
+                    maxLength = this.subscription.data[m].data.length;
+                    maxData = m;
                 }
             }
-            
+
             var total = 0;
             var newData = [];
-            for (var l = 0; l < minLength; l++) {
+            for (var l = 0; l < maxLength; l++) {
                 var sum = 0;
-                var timestamp = this.subscription.data[0].data[l][0];
+                var timestamp = this.subscription.data[maxData].data[l][0];
                 for (var j = 0; j < this.subscription.data.length; j++) {
-                    sum += this.subscription.data[j].data[l][1];
+                    if (l < this.subscription.data[j].data.length) {
+                        sum += this.subscription.data[j].data[l][1];
+                    }
                 }
                 newData.push([timestamp, sum]);
                 total += sum;
