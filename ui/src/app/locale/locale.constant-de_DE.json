@@ -48,7 +48,8 @@
     "paste-reference": "Zeichen einfügen",
     "import": "Importieren",
     "export": "Exportieren",
-    "share-via": "Teilen mit {{provider}}"
+    "share-via": "Teilen mit {{provider}}",
+    "export-data": "Export widget data"
   },
   "aggregation": {
     "aggregation": "Aggregation",

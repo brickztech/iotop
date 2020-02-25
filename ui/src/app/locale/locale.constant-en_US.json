@@ -50,7 +50,8 @@
         "export": "Export",
         "share-via": "Share via {{provider}}",
         "continue": "Continue",
-        "discard-changes": "Discard Changes"
+        "discard-changes": "Discard Changes",
+        "export-data": "Export widget data"
     },
     "aggregation": {
         "aggregation": "Aggregation",
@@ -1620,6 +1621,7 @@
         "display-title": "Display title",
         "drop-shadow": "Drop shadow",
         "enable-fullscreen": "Enable fullscreen",
+        "enable-data-export": "Enable data export",
         "background-color": "Background color",
         "text-color": "Text color",
         "padding": "Padding",

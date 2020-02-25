@@ -48,7 +48,8 @@
         "paste-reference": "Vložit referenci",
         "import": "Importovat",
         "export": "Exportovat",
-        "share-via": "Sdílet přes {{provider}}"
+        "share-via": "Sdílet přes {{provider}}",
+        "export-data": "Export widget data"
     },
     "aggregation": {
         "aggregation": "Agregace",

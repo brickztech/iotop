@@ -48,7 +48,8 @@
         "paste-reference": "رونوشت مرجع",
         "import": "وارد کردن",
         "export": "صدور",
-        "share-via": "{{provider}} اشتراک گذاري از طريق" 
+        "share-via": "{{provider}} اشتراک گذاري از طريق",
+        "export-data": "Export widget data"
 	},
     "aggregation": {
         "aggregation": "تجميع",

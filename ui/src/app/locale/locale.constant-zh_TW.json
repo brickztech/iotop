@@ -48,7 +48,8 @@
         "paste-reference": "貼上引用",
         "import": "匯入",
         "export": "匯出",
-        "share-via": "通過 {{provider}}分享"
+        "share-via": "通過 {{provider}}分享",
+        "export-data": "Export widget data"
     },
     "aggregation": {
         "aggregation": "聚合",

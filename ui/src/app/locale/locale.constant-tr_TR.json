@@ -48,7 +48,8 @@
         "paste-reference": "Referansı yapıştır",
         "import": "İçe aktar",
         "export": "Dışa aktar",
-        "share-via": "{{provider}} ile paylaş"
+        "share-via": "{{provider}} ile paylaş",
+        "export-data": "Export widget data"
     },
     "aggregation": {
         "aggregation": "Toplama",

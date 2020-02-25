@@ -48,7 +48,8 @@
         "paste-reference": "粘贴引用",
         "import": "导入",
         "export": "导出",
-        "share-via": "通过 {{provider}}分享"
+        "share-via": "通过 {{provider}}分享",
+        "export-data": "Export widget data"
     },
     "aggregation": {
         "aggregation": "聚合",

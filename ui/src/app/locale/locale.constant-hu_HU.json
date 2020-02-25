@@ -50,13 +50,14 @@
         "export": "Mentés",
         "share-via": "Megosztás ezen a felületen {{provider}}",
         "continue": "Folytatás",
-        "discard-changes": "Változtatások eldobása"
+        "discard-changes": "Változtatások eldobása",
+        "export-data": "Adatok letöltése"
     },
     "aggregation": {
         "aggregation": "Aggregation",
-        "function": "Data aggregation function",
+        "function": "Aggregáló függvény",
         "limit": "Maximum értékek",
-        "group-interval": "Grouping interval",
+        "group-interval": "Csoportosítás időtartama",
         "min": "Min",
         "max": "Max",
         "avg": "Átlag",

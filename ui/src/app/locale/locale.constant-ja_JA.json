@@ -48,7 +48,8 @@
 		"paste-reference": "参照貼り付け",
 		"import": "インポート",
 		"export": "輸出する",
-		"share-via": "{{provider}}"
+		"share-via": "{{provider}}",
+        "export-data": "Export widget data"
 	},
 	"aggregation": {
 		"aggregation": "集約",

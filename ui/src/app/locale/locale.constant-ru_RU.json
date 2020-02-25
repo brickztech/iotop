@@ -50,7 +50,8 @@
         "export": "Экспортировать",
         "share-via": "Поделиться в {{provider}}",
         "continue": "Продолжить",
-        "discard-changes": "Отменить изменения"
+        "discard-changes": "Отменить изменения",
+        "export-data": "Export widget data"
     },
     "aggregation": {
         "aggregation": "Агрегация",

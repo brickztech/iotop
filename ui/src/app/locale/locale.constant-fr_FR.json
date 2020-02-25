@@ -50,7 +50,8 @@
         "undo": "Annuler",
         "update": "mise à jour",
         "view": "Afficher",
-        "yes": "Oui"
+        "yes": "Oui",
+        "export-data": "Export widget data"
     },
     "admin": {
         "base-url": "URL de base",

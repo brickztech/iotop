@@ -53,7 +53,8 @@
     "share-via": "Διαμοίραση μέσω {{provider}}",
     "move": "Μετακίνηση",
     "select": "Επιλογή",
-    "continue": "Συνέχεια"
+    "continue": "Συνέχεια",
+    "export-data": "Export widget data"
   },
   "aggregation": {
     "aggregation": "Συνάθροιση",

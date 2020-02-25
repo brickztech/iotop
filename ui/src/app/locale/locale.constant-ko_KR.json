@@ -48,7 +48,8 @@
         "paste-reference": "Paste reference",
         "import": "가져오기",
         "export": "내보내기",
-        "share-via": "Share via {{provider}}"
+        "share-via": "Share via {{provider}}",
+        "export-data": "Export widget data"
     },
     "aggregation": {
         "aggregation": "집합",

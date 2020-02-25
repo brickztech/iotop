@@ -52,7 +52,8 @@
         "continue": "Продовжити",
         "discard-changes": "Скасувати зміни",
         "move": "Перемістити",
-        "select": "Вибрати"
+        "select": "Вибрати",
+        "export-data": "Export widget data"
     },
     "aggregation": {
         "aggregation": "Агрегація",
