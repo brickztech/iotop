@@ -87,7 +87,7 @@ function Dashboard() {
 }
 
 /*@ngInject*/
-function DashboardController($scope, $rootScope, $element, $timeout, $mdMedia, $mdUtil, $q, timeService, types, utils) {
+function DashboardController($scope, $rootScope, $element, $timeout, $mdMedia, $mdUtil, $q, timeService, types, utils, exportWidgetData) {
 
     var highlightedMode = false;
     var highlightedWidget = null;
@@ -194,6 +194,7 @@ function DashboardController($scope, $rootScope, $element, $timeout, $mdMedia, $
     vm.customWidgetHeaderActions = customWidgetHeaderActions;
     vm.widgetActions = widgetActions;
     vm.dropWidgetShadow = dropWidgetShadow;
+    vm.enableWidgetDataExport = enableWidgetDataExport;
     vm.enableWidgetFullscreen = enableWidgetFullscreen;
     vm.hasTimewindow = hasTimewindow;
     vm.hasAggregation = hasAggregation;
@@ -204,6 +205,7 @@ function DashboardController($scope, $rootScope, $element, $timeout, $mdMedia, $
 
     vm.openDashboardContextMenu = openDashboardContextMenu;
     vm.openWidgetContextMenu = openWidgetContextMenu;
+    vm.exportWidgetData = exportWidgetData.exportData;
 
     vm.getEventGridPosition = getEventGridPosition;
     vm.reload = reload;
@@ -1006,6 +1008,14 @@ function DashboardController($scope, $rootScope, $element, $timeout, $mdMedia, $
             return widget.config.dropShadow;
         } else {
             return true;
+        }
+    }
+
+    function enableWidgetDataExport(widget) {
+        if (angular.isDefined(widget.config.enableDataExport)) {
+            return widget.config.enableDataExport;
+        } else {
+            return false;
         }
     }
 

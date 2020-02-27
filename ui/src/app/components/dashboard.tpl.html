@@ -81,6 +81,15 @@
 											</md-tooltip>
 											<ng-md-icon size="20" icon="{{action.icon}}"></ng-md-icon>
 										</md-button>
+										<md-button ng-show="!vm.isEdit && vm.enableWidgetDataExport(widget)"
+												   aria-label="{{ 'action.export-data' | translate }}"
+												   ng-click="vm.exportWidgetData(widget)"
+												   class="md-icon-button">
+											    <md-tooltip md-direction="top">
+													{{ 'action.export-data' | translate }}
+												</md-tooltip>
+												<md-icon size="20" md-svg-icon="mdi:file-export"></md-icon>
+										</md-button>
 										<md-button id="expand-button"
 												   ng-show="!vm.isEdit && vm.enableWidgetFullscreen(widget)"
 												   aria-label="{{ 'fullscreen.fullscreen' | translate }}"

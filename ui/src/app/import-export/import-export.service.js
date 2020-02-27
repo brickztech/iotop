@@ -45,7 +45,8 @@ export default function ImportExport($log, $translate, $q, $mdDialog, $document,
         importEntities: importEntities,
         convertCSVToJson: convertCSVToJson,
         exportToPc: exportToPc,
-        createMultiEntity: createMultiEntity
+        createMultiEntity: createMultiEntity,
+        saveBlobToFile: saveBlobToFile
     };
 
     return service;
@@ -914,22 +915,7 @@ export default function ImportExport($log, $translate, $q, $mdDialog, $document,
         }
 
         var blob = new Blob([data], {type: 'text/json'});
-
-        // FOR IE:
-
-        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-            window.navigator.msSaveOrOpenBlob(blob, filename);
-        } else {
-            var e = document.createEvent('MouseEvents'),
-                a = document.createElement('a');
-
-            a.download = filename;
-            a.href = window.URL.createObjectURL(blob);
-            a.dataset.downloadurl = ['text/json', a.download, a.href].join(':');
-            e.initEvent('click', true, false, window,
-                0, 0, 0, 0, 0, false, false, false, false, 0, null);
-            a.dispatchEvent(e);
-        }
+        saveBlobToFile(blob, filename);
     }
 
     function openImportDialog($event, importTitle, importFileLabel) {
@@ -981,6 +967,23 @@ export default function ImportExport($log, $translate, $q, $mdDialog, $document,
     function fixedDialogSize(scope, element) {
         let dialogElement = element[0].getElementsByTagName('md-dialog');
         dialogElement[0].style.width = dialogElement[0].offsetWidth + 2 + "px";
+    }
+
+    function saveBlobToFile(blob, filename) {
+        // FOR IE:
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(blob, filename);
+        } else {
+            var e = document.createEvent('MouseEvents'),
+                a = document.createElement('a');
+
+            a.download = filename;
+            a.href = window.URL.createObjectURL(blob);
+            a.dataset.downloadurl = [blob.type, a.download, a.href].join(':');
+            e.initEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+            a.dispatchEvent(e);
+        }
+
     }
 }
 

@@ -249,21 +249,36 @@
                         <input name="titleTooltip" ng-model="titleTooltip">
                     </md-input-container>
                 </div>
+
                 <div layout='column' layout-align="center" layout-gt-sm='row' layout-align-gt-sm="start center">
-                    <div layout="row" layout-padding>
-                        <md-checkbox aria-label="{{ 'widget-config.display-title' | translate }}"
-                                     ng-model="showTitle">{{ 'widget-config.display-title' | translate }}
-                        </md-checkbox>
-                    </div>
-                    <div layout="row" layout-padding>
-                        <md-checkbox aria-label="{{ 'widget-config.drop-shadow' | translate }}"
-                                     ng-model="dropShadow">{{ 'widget-config.drop-shadow' | translate }}
-                        </md-checkbox>
-                    </div>
-                    <div layout="row" layout-padding>
-                        <md-checkbox aria-label="{{ 'widget-config.enable-fullscreen' | translate }}"
-                                     ng-model="enableFullscreen">{{ 'widget-config.enable-fullscreen' | translate }}
-                        </md-checkbox>
+                    <div layout='column'>
+                        <div layout='column' layout-align="center" layout-gt-sm='row' layout-align-gt-sm="start center">
+                            <div layout="row" layout-padding>
+                                <md-checkbox aria-label="{{ 'widget-config.display-title' | translate }}"
+                                            ng-model="showTitle">{{ 'widget-config.display-title' | translate }}
+                                </md-checkbox>
+                            </div>
+                            <div layout="row" layout-padding>
+                                <md-checkbox aria-label="{{ 'widget-config.drop-shadow' | translate }}"
+                                            ng-model="dropShadow">{{ 'widget-config.drop-shadow' | translate }}
+                                </md-checkbox>
+                            </div>
+                            <div layout="row" layout-padding>
+                                <md-checkbox aria-label="{{ 'widget-config.enable-fullscreen' | translate }}"
+                                            ng-model="enableFullscreen">{{ 'widget-config.enable-fullscreen' | translate }}
+                                </md-checkbox>
+                            </div>
+                        </div>
+                    
+                        <div layout="column" layout-gt-sm="row" ng-show="widgetType === types.widgetType.timeseries.value ||
+                            widgetType === types.widgetType.latest.value ||
+                            widgetType === types.widgetType.alarm.value" class="layout-gt-sm-row layout-column" aria-hidden="false">
+                            <div layout="row" layout-padding="" class="layout-padding layout-row">
+                                <md-checkbox aria-label="{{ 'widget-config.enable-data-export' | translate }}" 
+                                            ng-model="enableDataExport">{{ 'widget-config.enable-data-export' | translate }}
+                                </md-checkbox>
+                            </div>
+                        </div>
                     </div>
                     <div flex>
                         <label translate>widget-config.widget-style</label>
@@ -271,6 +286,7 @@
                         </div>
                     </div>
                 </div>
+            
                 <div layout='column' layout-align="center" layout-gt-sm='row' layout-align-gt-sm="start center">
                     <div flex
                          md-color-picker

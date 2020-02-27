@@ -117,6 +117,7 @@ function WidgetConfig($compile, $templateCache, $rootScope, $translate, $timeout
                     scope.showTitle = config.showTitle;
                     scope.dropShadow = angular.isDefined(config.dropShadow) ? config.dropShadow : true;
                     scope.enableFullscreen = angular.isDefined(config.enableFullscreen) ? config.enableFullscreen : true;
+                    scope.enableDataExport = angular.isDefined(config.enableDataExport) ? config.enableDataExport : true;
                     scope.backgroundColor = config.backgroundColor;
                     scope.color = config.color;
                     scope.padding = config.padding;
@@ -245,7 +246,7 @@ function WidgetConfig($compile, $templateCache, $rootScope, $translate, $timeout
             }
         };
 
-        scope.$watch('title + showTitleIcon + titleIcon + iconColor + iconSize + titleTooltip + showTitle + dropShadow + enableFullscreen + backgroundColor + ' +
+        scope.$watch('title + showTitleIcon + titleIcon + iconColor + iconSize + titleTooltip + showTitle + dropShadow + enableFullscreen + enableDataExport + backgroundColor + ' +
             'color + padding + margin + widgetStyle + titleStyle + mobileOrder + mobileHeight + units + decimals + useDashboardTimewindow + ' +
             'displayTimewindow + alarmSearchStatus + alarmsPollingInterval + alarmsMaxCountLoad + alarmsFetchSize + showLegend', function () {
             if (ngModelCtrl.$viewValue) {
@@ -261,6 +262,7 @@ function WidgetConfig($compile, $templateCache, $rootScope, $translate, $timeout
                     config.showTitle = scope.showTitle;
                     config.dropShadow = scope.dropShadow;
                     config.enableFullscreen = scope.enableFullscreen;
+                    config.enableDataExport = scope.enableDataExport;
                     config.backgroundColor = scope.backgroundColor;
                     config.color = scope.color;
                     config.padding = scope.padding;
