@@ -93,3 +93,9 @@ $ ./docker-start-services.sh
 Where:
 
 - `FROM_VERSION` - from which version upgrade should be started. See [Upgrade Instructions](https://thingsboard.io/docs/user-guide/install/upgrade-instructions) for valid `fromVersion` values.
+
+## WEB-UI
+
+In microservice architect when you modify web-ui you should rebuild and update tb-node too. Otherwise widget editor won't work. 
+
+
