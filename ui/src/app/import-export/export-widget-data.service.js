@@ -67,30 +67,6 @@ export default function ExportWidgetData(importExport) {
         header.push('"__source__"');
         return header;
     }
-    
-/*
-    function exportData(widget) {
-        let defaultSubscription = widget.$ctx().defaultSubscription;
-        var header = ['"timestamp"'];
-        var rows = [];
-        defaultSubscription.data.forEach((ds, dsIdx) => {
-            header.push('"' + ds.datasource.name + '"');
-            ds.data.forEach(data => {
-                var row = Array(defaultSubscription.data.length + 1);
-                row[0] = data[0];
-                row[dsIdx + 1] = data[1];
-                rows.push(row);
-            });
-        });
-        rows = rows.sort((a, b) => a[0] - b[0])
-        rows.forEach(data => data[0] = moment(new Date(data[0])).format('YYYY-MM-DD HH:mm:ss'));
-        rows.unshift(header);
-        let csvContent = arrayToCsv(rows);
-        var blob = new Blob([csvContent], {type: 'text/csv'});
-        let filename = widget.config.title || 'widget-data';
-        saveBlobToFile(blob, filename + '.csv');
-    } 
-*/
 
     function arrayToCsv(rows) {
         var content = '';
