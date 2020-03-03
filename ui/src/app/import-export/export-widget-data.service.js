@@ -18,15 +18,14 @@ export default function ExportWidgetData(importExport) {
     return service;
 
     function exportData(widget) {
-        let defaultSubscription = widget.$ctx().defaultSubscription;
-        var keyOffset = 0;
+        let ctx = widget.$ctx();
+        let defaultSubscription = ctx.defaultSubscription;
         var allRows = [];
-        defaultSubscription.datasources.forEach(datasource => {
-            let keyStartIndex = keyOffset;
-            keyOffset += datasource.dataKeys.length;
-            let columnsData = defaultSubscription.data.slice(keyStartIndex, keyOffset);
-            allRows = allRows.concat(mergeColumnsData(columnsData));
-        });
+        if (angular.isDefined(ctx.getExportData)) {
+            allRows = ctx.getExportData();
+        } else {
+            allRows = getExportData(defaultSubscription);
+        }
         allRows = allRows.sort((a, b) => a[0] - b[0]);
         allRows.forEach(unixTimeToString);
         allRows.unshift(getHeader(defaultSubscription.datasources[0].dataKeys));
@@ -34,6 +33,18 @@ export default function ExportWidgetData(importExport) {
         var blob = new Blob([csvContent], {type: 'text/csv'});
         let filename = widget.config.title || 'widget-data';
         importExport.saveBlobToFile(blob, filename + '.csv');
+    }
+
+    function getExportData(defaultSubscription) {
+        var allRows = [];
+        var keyOffset = 0;
+        defaultSubscription.datasources.forEach(datasource => {
+            let keyStartIndex = keyOffset;
+            keyOffset += datasource.dataKeys.length;
+            let columnsData = defaultSubscription.data.slice(keyStartIndex, keyOffset);
+            allRows = allRows.concat(mergeColumnsData(columnsData));
+        });
+        return allRows;
     }
 
     function mergeColumnsData(columnsData) {

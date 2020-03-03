@@ -469,6 +469,7 @@ class IotopFlot {
         $log.log("init");
 
         this.subscription = subscription;
+        this.ctx.getExportData = this.getExportData;
         this.$element = $element;
         var colors = [];
         this.yaxes = [];
@@ -614,6 +615,11 @@ class IotopFlot {
         }
         this.ctx.plotInited = true;
         this.createPlot();
+    }
+
+    getExportData() {
+        var data = this.plot.getData();
+        return data[0].data;
     }
 
     createYAxis(keySettings, units) {

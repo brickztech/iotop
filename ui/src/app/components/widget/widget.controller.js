@@ -136,7 +136,8 @@ export default function WidgetController($scope, $state, $timeout, $window, $ocL
             getActiveEntityInfo: getActiveEntityInfo
         },
         stateController: stateController,
-        aliasController: aliasController
+        aliasController: aliasController,
+        getExportData: widget.getExportData
     };
 
     widgetContext.customHeaderActions = [];
