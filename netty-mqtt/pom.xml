@@ -19,12 +19,12 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.brickztech</groupId>
-        <version>1.0.0</version>
+        <version>1.0.1-SNAPSHOT</version>
         <artifactId>iotop</artifactId>
     </parent>
     <groupId>com.brickztech</groupId>
     <artifactId>netty-mqtt</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Netty MQTT Client</name>
