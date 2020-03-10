@@ -20,7 +20,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.brickztech</groupId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0</version>
         <artifactId>iotop</artifactId>
     </parent>
     <artifactId>application</artifactId>
