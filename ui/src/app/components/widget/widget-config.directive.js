@@ -117,7 +117,7 @@ function WidgetConfig($compile, $templateCache, $rootScope, $translate, $timeout
                     scope.showTitle = config.showTitle;
                     scope.dropShadow = angular.isDefined(config.dropShadow) ? config.dropShadow : true;
                     scope.enableFullscreen = angular.isDefined(config.enableFullscreen) ? config.enableFullscreen : true;
-                    scope.enableDataExport = angular.isDefined(config.enableDataExport) ? config.enableDataExport : true;
+                    scope.enableDataExport = angular.isDefined(config.enableDataExport) ? config.enableDataExport : false;
                     scope.backgroundColor = config.backgroundColor;
                     scope.color = config.color;
                     scope.padding = config.padding;
