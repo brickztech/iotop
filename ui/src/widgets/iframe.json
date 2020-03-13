@@ -1,0 +1,16 @@
+{
+  "alias": "demo",
+  "name": "IFrame",
+  "descriptor": {
+    "type": "static",
+    "sizeX": 8,
+    "sizeY": 4,
+    "resources": [],
+    "templateHtml": "<tb-iframe-widget frame-id=\"frameId\" ctx=\"ctx\">\n</tb-iframe-widget>",
+    "templateCss": "",
+    "controllerScript": "self.onInit = function() {\n    var scope = self.ctx.$scope;\n    var id = self.ctx.$scope.$injector.get('utils').guid();\n    scope.frameId = \"frame-\"+id;\n    scope.ctx = self.ctx;\n}\n\nself.onDataUpdated = function() {\n}\n\nself.typeParameters = function() {\n    return {\n        dataKeysOptional: true\n    };\n}\n\nself.onDestroy = function() {\n}\n",
+    "settingsSchema": "{\n    \"schema\": {\n        \"type\": \"object\",\n        \"title\": \"Settings\",\n        \"required\": [\"frameSrc\"],\n        \"properties\": {\n            \"frameSrc\": {\n                \"title\": \"Source\",\n                \"type\": \"string\"\n            }\n        }\n    },\n    \"form\": [\n        {\n            \"key\": \"frameSrc\",\n            \"type\": \"text\"\n        }           \n    ]\n}",
+    "dataKeySettingsSchema": "{}\n",
+    "defaultConfig": "{\"datasources\":[{\"type\":\"static\",\"name\":\"function\",\"dataKeys\":[{\"name\":\"f(x)\",\"type\":\"function\",\"label\":\"Random\",\"color\":\"#2196f3\",\"settings\":{},\"_hash\":0.15479322438769105,\"funcBody\":\"var value = prevValue + Math.random() * 100 - 50;\\nvar multiplier = Math.pow(10, 2 || 0);\\nvar value = Math.round(value * multiplier) / multiplier;\\nif (value < -1000) {\\n\\tvalue = -1000;\\n} else if (value > 1000) {\\n\\tvalue = 1000;\\n}\\nreturn value;\"}]}],\"timewindow\":{\"realtime\":{\"timewindowMs\":60000}},\"showTitle\":false,\"backgroundColor\":\"rgb(255, 255, 255)\",\"color\":\"rgba(0, 0, 0, 0.87)\",\"padding\":\"8px\",\"settings\":{\"frameSrc\":\"https://google.com\"},\"title\":\"IFrame\",\"dropShadow\":true,\"showTitleIcon\":false,\"titleIcon\":\"more_horiz\",\"iconColor\":\"rgba(0, 0, 0, 0.87)\",\"iconSize\":\"24px\",\"titleTooltip\":\"\",\"enableFullscreen\":true,\"widgetStyle\":{},\"titleStyle\":{\"fontSize\":\"16px\",\"fontWeight\":400},\"useDashboardTimewindow\":true,\"displayTimewindow\":true,\"showLegend\":false,\"actions\":{}}"
+  }
+}
