@@ -44,13 +44,13 @@ public class TbCalculateSumNode implements TbNode {
         double sum = 0;
         boolean hasRecords = false;
         try {
-            JsonNode jsonNode = mapper.readTree(msg.getData());
-            Iterator<String> iterator = jsonNode.fieldNames();
+            JsonNode jsonNode = mapper.readTree(msg.getMetaData().getValue(inputKey));
+            Iterator<JsonNode> iterator = jsonNode.elements();
             while (iterator.hasNext()) {
-                String field = iterator.next();
-                if (field.startsWith(inputKey)) {
+                JsonNode field = iterator.next();
+                if (field.has("value")) {
                     hasRecords = true;
-                    sum += jsonNode.get(field).asDouble();
+                    sum += field.get("value").asDouble();
                 }
             }
             if (hasRecords) {
