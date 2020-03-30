@@ -39,7 +39,7 @@ import static org.thingsboard.server.common.data.kv.Aggregation.NONE;
                 "If selected fetch mode <b>FIRST</b> or <b>LAST</b> Telemetry will be added like string without Timestamp.</br>" +
                 "Also, the rule node allows you to select telemetry sampling order: <b>ASC</b> or <b>DESC</b>. </br>" +
                 "<b>Note</b>: The maximum size of the fetched array is 1000 records.\n ",
-        uiResources = {"static/rulenode/rulenode-custom-config.js"},
+        uiResources = {"static/rulenode/custom-nodes-config.js"},
         configDirective = "tbEnrichmentNodeGetTelemetryFromDatabase")
 public class TbGetTelemetryForEntityNode implements TbNode {
 
