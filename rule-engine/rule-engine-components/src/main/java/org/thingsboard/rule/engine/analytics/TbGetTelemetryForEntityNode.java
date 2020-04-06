@@ -34,13 +34,9 @@ import static org.thingsboard.server.common.data.kv.Aggregation.NONE;
         name = "originator telemetry and sum",
         configClazz = TbGetTelemetryForEntityNodeConfiguration.class,
         nodeDescription = "Get Selected Entity Telemetry for selected time range, sum it and add it to Message Data\n",
-        nodeDetails = "The node allows you to select fetch mode: <b>FIRST/LAST/ALL</b> to fetch telemetry of certain time range that are added into Message metadata without any prefix. " +
-                "If selected fetch mode <b>ALL</b> Telemetry will be added like array into Message Metadata where <b>key</b> is Timestamp and <b>value</b> is value of Telemetry.</br>" +
-                "If selected fetch mode <b>FIRST</b> or <b>LAST</b> Telemetry will be added like string without Timestamp.</br>" +
-                "Also, the rule node allows you to select telemetry sampling order: <b>ASC</b> or <b>DESC</b>. </br>" +
-                "<b>Note</b>: The maximum size of the fetched array is 1000 records.\n ",
-        uiResources = {"static/rulenode/custom-nodes-config.js"},
-        configDirective = "tbEnrichmentNodeGetTelemetryFromDatabase")
+        nodeDetails = "Test node stuff",
+        uiResources = {"static/rulenode/sum-node-config.js"},
+        configDirective = "tbEnrichmentNodeGetTelemetryAndSum")
 public class TbGetTelemetryForEntityNode implements TbNode {
 
     private static final String ASC_ORDER = "ASC";
@@ -54,8 +50,8 @@ public class TbGetTelemetryForEntityNode implements TbNode {
     @Override
     public void init(TbContext ctx, TbNodeConfiguration configuration) throws TbNodeException {
         this.config = TbNodeUtils.convert(configuration, TbGetTelemetryForEntityNodeConfiguration.class);
-        tsKeyName = config.getLatestTsKeyName();
-        limit = validateLimit(config.getLimit());
+        //tsKeyName = config.getLatestTsKeyName();
+        //limit = validateLimit(config.getLimit());
         mapper = new ObjectMapper();
         mapper.configure(JsonGenerator.Feature.QUOTE_FIELD_NAMES, false);
         mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
@@ -148,8 +144,8 @@ public class TbGetTelemetryForEntityNode implements TbNode {
     private TbGetTelemetryForEntityNode.Interval getInterval(TbMsg msg) {
         TbGetTelemetryForEntityNode.Interval interval = new TbGetTelemetryForEntityNode.Interval();
         long ts = System.currentTimeMillis();
-        interval.setStartTs(ts - TimeUnit.valueOf(config.getStartIntervalTimeUnit()).toMillis(config.getStartInterval()));
-        interval.setEndTs(ts - TimeUnit.valueOf(config.getEndIntervalTimeUnit()).toMillis(config.getEndInterval()));
+        /*interval.setStartTs(ts - TimeUnit.valueOf(config.getStartIntervalTimeUnit()).toMillis(config.getStartInterval()));
+        interval.setEndTs(ts - TimeUnit.valueOf(config.getEndIntervalTimeUnit()).toMillis(config.getEndInterval()));*/
         return interval;
     }
 
@@ -157,7 +153,7 @@ public class TbGetTelemetryForEntityNode implements TbNode {
         if (limit != 0) {
             return limit;
         } else {
-            return MAX_FETCH_SIZE;
+            return /*MAX_FETCH_SIZE*/ 1000;
         }
     }
 
