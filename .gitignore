@@ -34,4 +34,4 @@ pom.xml.versionsBackup
 .instance_id
 rebuild-docker.sh
 widgets
-
+start-app.sh
