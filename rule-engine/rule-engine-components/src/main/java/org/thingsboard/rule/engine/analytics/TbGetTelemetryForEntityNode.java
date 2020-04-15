@@ -35,8 +35,8 @@ import static org.thingsboard.server.common.data.kv.Aggregation.NONE;
         configClazz = TbGetTelemetryForEntityNodeConfiguration.class,
         nodeDescription = "Get Selected Entity Telemetry for selected time range, sum it and add it to Message Data\n",
         nodeDetails = "Test node stuff",
-        uiResources = {"static/rulenode/sum-node-config.js"},
-        configDirective = "tbEnrichmentNodeGetTelemetryAndSum")
+        uiResources = {"static/rulenode/custom-nodes-config.js"},
+        configDirective = "tbEnrichmentNodeGetTelemetryAndSumConfig")
 public class TbGetTelemetryForEntityNode implements TbNode {
 
     private static final String ASC_ORDER = "ASC";

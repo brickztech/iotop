@@ -16,7 +16,7 @@ public class TbGetTelemetryForEntityNodeConfiguration implements NodeConfigurati
     private String endIntervalTimeUnit;
     private int limit;*/
 
-    //private String latestTsKeyName;
+    private String inputKey;
     private String outputKey;
 
     @Override
@@ -28,7 +28,8 @@ public class TbGetTelemetryForEntityNodeConfiguration implements NodeConfigurati
         configuration.setEndIntervalTimeUnit(TimeUnit.MINUTES.name());
         configuration.setEndInterval(1);
         configuration.setLimit(MAX_FETCH_SIZE);*/
-        configuration.setOutputKey("TemperatureSum");
+        configuration.setInputKey("power");
+        configuration.setOutputKey("PowerSum");
         return configuration;
     }
 }
