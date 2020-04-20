@@ -14,11 +14,19 @@ import lombok.extern.slf4j.Slf4j;
 import org.thingsboard.common.util.DonAsynchron;
 import org.thingsboard.rule.engine.api.*;
 import org.thingsboard.rule.engine.api.util.TbNodeUtils;
+import org.thingsboard.rule.engine.data.DeviceRelationsQuery;
+import org.thingsboard.server.common.data.Device;
+import org.thingsboard.server.common.data.device.DeviceSearchQuery;
+import org.thingsboard.server.common.data.id.EntityId;
 import org.thingsboard.server.common.data.kv.BaseReadTsKvQuery;
 import org.thingsboard.server.common.data.kv.ReadTsKvQuery;
 import org.thingsboard.server.common.data.kv.TsKvEntry;
 import org.thingsboard.server.common.data.plugin.ComponentType;
+import org.thingsboard.server.common.data.relation.EntityRelation;
+import org.thingsboard.server.common.data.relation.EntitySearchDirection;
+import org.thingsboard.server.common.data.relation.RelationsSearchParameters;
 import org.thingsboard.server.common.msg.TbMsg;
+import org.thingsboard.server.dao.device.DeviceService;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -65,10 +73,27 @@ public class TbGetTelemetryForEntityNode implements TbNode {
         if (inputKey.equals("") || outputKey.equals("")) {
             ctx.tellFailure(msg, new IllegalStateException("Telemetry is not selected!"));
         } else {
+            DeviceRelationsQuery deviceRelationsQuery = new DeviceRelationsQuery();
+            deviceRelationsQuery.setDirection(EntitySearchDirection.FROM);
+            deviceRelationsQuery.setMaxLevel(2);
+            deviceRelationsQuery.setRelationType(EntityRelation.CONTAINS_TYPE);
+            deviceRelationsQuery.setDeviceTypes(Collections.singletonList("villanyóra"));
             try {
-                ListenableFuture<List<TsKvEntry>> list = ctx.getTimeseriesService().findAll(ctx.getTenantId(), msg.getOriginator(), Collections.singletonList(buildQueries(msg)));
-                DonAsynchron.withCallback(list, data -> {
-                    double result = process(data);
+                DeviceService deviceService = ctx.getDeviceService();
+                DeviceSearchQuery query = buildQuery(msg.getOriginator(), deviceRelationsQuery);
+
+                ListenableFuture<List<Device>> devices = deviceService.findDevicesByQuery(ctx.getTenantId(), query);
+                DonAsynchron.withCallback(devices, deviceList -> {
+                    List<TsKvEntry> telemetryData = Collections.synchronizedList(new ArrayList<>());
+                    for (Device device: deviceList) {
+                        ListenableFuture<List<TsKvEntry>> list = ctx.getTimeseriesService().findAll(ctx.getTenantId(), device.getId(), Collections.singletonList(buildQueries(msg)));
+                        DonAsynchron.withCallback(list, telemetry -> {
+                            synchronized (telemetryData) {
+                                telemetryData.addAll(telemetry);
+                            }
+                        }, error -> ctx.tellFailure(msg, error), ctx.getDbCallbackExecutor());
+                    }
+                    double result = process(telemetryData);
                     TbMsg newMsg = null;
                     try {
                         newMsg = ctx.newMsg(msg.getType(), msg.getOriginator(), msg.getMetaData(), mapper.writeValueAsString(mapper.createObjectNode().put(outputKey, result)));
@@ -168,6 +193,16 @@ public class TbGetTelemetryForEntityNode implements TbNode {
         interval.setStartTs(ts-TimeUnit.valueOf("SECONDS").toMillis(Integer.parseInt(msg.getMetaData().getValue("interval"))));
         interval.setEndTs(ts);
         return interval;
+    }
+
+    private DeviceSearchQuery buildQuery(EntityId originator, DeviceRelationsQuery deviceRelationsQuery) {
+        DeviceSearchQuery query = new DeviceSearchQuery();
+        RelationsSearchParameters parameters = new RelationsSearchParameters(originator,
+                deviceRelationsQuery.getDirection(), deviceRelationsQuery.getMaxLevel(), deviceRelationsQuery.isFetchLastLevelOnly());
+        query.setParameters(parameters);
+        query.setRelationType(deviceRelationsQuery.getRelationType());
+        query.setDeviceTypes(deviceRelationsQuery.getDeviceTypes());
+        return query;
     }
 
     @Data
