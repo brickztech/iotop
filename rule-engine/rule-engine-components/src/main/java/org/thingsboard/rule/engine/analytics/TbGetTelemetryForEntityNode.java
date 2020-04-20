@@ -26,14 +26,13 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import static org.thingsboard.rule.engine.api.TbRelationTypes.SUCCESS;
-import static org.thingsboard.rule.engine.analytics.TbGetTelemetryForEntityNodeConfiguration.*;
 import static org.thingsboard.server.common.data.kv.Aggregation.NONE;
 
 @Slf4j
 @RuleNode(type = ComponentType.ENRICHMENT,
         name = "originator telemetry and sum",
         configClazz = TbGetTelemetryForEntityNodeConfiguration.class,
-        nodeDescription = "Get Selected Entity Telemetry for selected time range, sum it and add it to Message Data\n",
+        nodeDescription = "Get Entity Telemetry for selected time range, aggregate it and add it to Message Data\n",
         nodeDetails = "Test node stuff",
         uiResources = {"static/rulenode/custom-nodes-config.js"},
         configDirective = "tbEnrichmentNodeGetTelemetryAndSumConfig")
@@ -42,38 +41,40 @@ public class TbGetTelemetryForEntityNode implements TbNode {
     private static final String ASC_ORDER = "ASC";
 
     private TbGetTelemetryForEntityNodeConfiguration config;
-    private String tsKeyName;
-    private int limit;
+    private String inputKey;
     private ObjectMapper mapper;
     private String outputKey;
+    private int limit;
+    private TbGetTelemetryForEntityNodeConfiguration.Aggregations aggregation;
 
     @Override
     public void init(TbContext ctx, TbNodeConfiguration configuration) throws TbNodeException {
         this.config = TbNodeUtils.convert(configuration, TbGetTelemetryForEntityNodeConfiguration.class);
-        //tsKeyName = config.getLatestTsKeyName();
-        //limit = validateLimit(config.getLimit());
+        inputKey = config.getInputKey();
+        limit = 10000;
         mapper = new ObjectMapper();
         mapper.configure(JsonGenerator.Feature.QUOTE_FIELD_NAMES, false);
         mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
         outputKey = config.getOutputKey();
+        aggregation = config.getAggregation();
+
     }
 
     @Override
     public void onMsg(TbContext ctx, TbMsg msg) throws ExecutionException, InterruptedException, TbNodeException {
-        if (tsKeyName.equals("")) {
+        if (inputKey.equals("") || outputKey.equals("")) {
             ctx.tellFailure(msg, new IllegalStateException("Telemetry is not selected!"));
         } else {
             try {
                 ListenableFuture<List<TsKvEntry>> list = ctx.getTimeseriesService().findAll(ctx.getTenantId(), msg.getOriginator(), Collections.singletonList(buildQueries(msg)));
                 DonAsynchron.withCallback(list, data -> {
-                    double sum = process(data, msg);
+                    double result = process(data);
                     TbMsg newMsg = null;
                     try {
-                        newMsg = ctx.newMsg(msg.getType(), msg.getOriginator(), msg.getMetaData(), mapper.writeValueAsString(mapper.createObjectNode().put(outputKey, sum)));
+                        newMsg = ctx.newMsg(msg.getType(), msg.getOriginator(), msg.getMetaData(), mapper.writeValueAsString(mapper.createObjectNode().put(outputKey, result)));
                     } catch (JsonProcessingException e) {
                         ctx.tellFailure(msg, e);
                     }
-                    // TbMsg newMsg = ctx.transformMsg(msg, msg.getType(), msg.getOriginator(), msg.getMetaData(), msg.getData());
                     ctx.tellNext(newMsg, SUCCESS);
                 }, error -> ctx.tellFailure(msg, error), ctx.getDbCallbackExecutor());
             } catch (Exception e) {
@@ -89,25 +90,45 @@ public class TbGetTelemetryForEntityNode implements TbNode {
     }
 
     private ReadTsKvQuery buildQueries(TbMsg msg) {
-        return new BaseReadTsKvQuery(tsKeyName, getInterval(msg).getStartTs(), getInterval(msg).getEndTs(), 1, limit, NONE, ASC_ORDER);
+        return new BaseReadTsKvQuery(inputKey, getInterval(msg).getStartTs(), getInterval(msg).getEndTs(), 1, limit, NONE, ASC_ORDER);
     }
 
-    private double process(List<TsKvEntry> entries, TbMsg msg) {
+    private double process(List<TsKvEntry> entries) {
         ObjectNode resultNode = mapper.createObjectNode();
         entries.forEach(entry -> processArray(resultNode, entry));
         Map<String, JsonNode> data = new ConcurrentHashMap<>();
 
-        if (resultNode.has(tsKeyName)) {
-            data.put(tsKeyName, resultNode.get(tsKeyName));
+        if (resultNode.has(inputKey)) {
+            data.put(inputKey, resultNode.get(inputKey));
         }
 
+
         double sum = 0;
-        for (Map.Entry<String, JsonNode> field : data.entrySet()) {
-            if (!field.getValue().isNull()) {
-                sum += field.getValue().asDouble();
+        double min = data.get(inputKey).get(0).get("value").asDouble();
+        double max = data.get(inputKey).get(0).get("value").asDouble();
+        for (JsonNode field : data.get(inputKey)) {
+            if (!field.get("value").isNull()) {
+                double element = field.get("value").asDouble();
+                sum += element;
+                if (element > max) {
+                    max = element;
+                } else if (element < min) {
+                    min = element;
+                }
             }
         }
-        return sum;
+        switch (aggregation) {
+            case AVG:
+                return sum / data.get(inputKey).size();
+            case MIN:
+                return min;
+            case MAX:
+                return max;
+            case SUM:
+                return sum;
+            default:
+                throw new NoSuchElementException("There is no such aggregation option");
+        }
     }
 
     private void processArray(ObjectNode node, TsKvEntry entry) {
@@ -144,17 +165,9 @@ public class TbGetTelemetryForEntityNode implements TbNode {
     private TbGetTelemetryForEntityNode.Interval getInterval(TbMsg msg) {
         TbGetTelemetryForEntityNode.Interval interval = new TbGetTelemetryForEntityNode.Interval();
         long ts = System.currentTimeMillis();
-        /*interval.setStartTs(ts - TimeUnit.valueOf(config.getStartIntervalTimeUnit()).toMillis(config.getStartInterval()));
-        interval.setEndTs(ts - TimeUnit.valueOf(config.getEndIntervalTimeUnit()).toMillis(config.getEndInterval()));*/
+        interval.setStartTs(ts-TimeUnit.valueOf("SECONDS").toMillis(Integer.parseInt(msg.getMetaData().getValue("interval"))));
+        interval.setEndTs(ts);
         return interval;
-    }
-
-    private int validateLimit(int limit) {
-        if (limit != 0) {
-            return limit;
-        } else {
-            return /*MAX_FETCH_SIZE*/ 1000;
-        }
     }
 
     @Data
