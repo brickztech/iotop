@@ -55,6 +55,7 @@ public class TbGetTelemetryForEntityNode implements TbNode {
     private String outputKey;
     private int limit;
     private Aggregation aggregation;
+    private DeviceRelationsQuery deviceRelationsQuery;
 
     @Override
     public void init(TbContext ctx, TbNodeConfiguration configuration) throws TbNodeException {
@@ -66,7 +67,6 @@ public class TbGetTelemetryForEntityNode implements TbNode {
         mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
         outputKey = config.getOutputKey();
         aggregation = config.getAggregation();
-
     }
 
     @Override
@@ -74,14 +74,9 @@ public class TbGetTelemetryForEntityNode implements TbNode {
         if (inputKey.equals("") || outputKey.equals("")) {
             ctx.tellFailure(msg, new IllegalStateException("Telemetry is not selected!"));
         } else {
-            DeviceRelationsQuery deviceRelationsQuery = new DeviceRelationsQuery();
-            deviceRelationsQuery.setDirection(EntitySearchDirection.FROM);
-            deviceRelationsQuery.setMaxLevel(2);
-            deviceRelationsQuery.setRelationType(EntityRelation.CONTAINS_TYPE);
-            deviceRelationsQuery.setDeviceTypes(Collections.singletonList("villanyóra"));
             try {
                 DeviceService deviceService = ctx.getDeviceService();
-                DeviceSearchQuery query = buildQuery(msg.getOriginator(), deviceRelationsQuery);
+                DeviceSearchQuery query = buildQuery(msg.getOriginator(), config.getDeviceRelationsQuery());
 
                 ListenableFuture<List<Device>> devices = deviceService.findDevicesByQuery(ctx.getTenantId(), query);
                 DonAsynchron.withCallback(devices, deviceList -> {
