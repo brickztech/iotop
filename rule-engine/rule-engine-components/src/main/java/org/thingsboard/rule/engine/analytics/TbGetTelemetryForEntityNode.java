@@ -18,6 +18,7 @@ import org.thingsboard.rule.engine.data.DeviceRelationsQuery;
 import org.thingsboard.server.common.data.Device;
 import org.thingsboard.server.common.data.device.DeviceSearchQuery;
 import org.thingsboard.server.common.data.id.EntityId;
+import org.thingsboard.server.common.data.kv.Aggregation;
 import org.thingsboard.server.common.data.kv.BaseReadTsKvQuery;
 import org.thingsboard.server.common.data.kv.ReadTsKvQuery;
 import org.thingsboard.server.common.data.kv.TsKvEntry;
@@ -53,7 +54,7 @@ public class TbGetTelemetryForEntityNode implements TbNode {
     private ObjectMapper mapper;
     private String outputKey;
     private int limit;
-    private TbGetTelemetryForEntityNodeConfiguration.Aggregations aggregation;
+    private Aggregation aggregation;
 
     @Override
     public void init(TbContext ctx, TbNodeConfiguration configuration) throws TbNodeException {
@@ -151,6 +152,8 @@ public class TbGetTelemetryForEntityNode implements TbNode {
                 return max;
             case SUM:
                 return sum;
+            case COUNT:
+                return data.get(inputKey).size();
             default:
                 throw new NoSuchElementException("There is no such aggregation option");
         }
