@@ -23,8 +23,6 @@ import org.thingsboard.server.common.data.kv.BaseReadTsKvQuery;
 import org.thingsboard.server.common.data.kv.ReadTsKvQuery;
 import org.thingsboard.server.common.data.kv.TsKvEntry;
 import org.thingsboard.server.common.data.plugin.ComponentType;
-import org.thingsboard.server.common.data.relation.EntityRelation;
-import org.thingsboard.server.common.data.relation.EntitySearchDirection;
 import org.thingsboard.server.common.data.relation.RelationsSearchParameters;
 import org.thingsboard.server.common.msg.TbMsg;
 import org.thingsboard.server.dao.device.DeviceService;
@@ -35,7 +33,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import static org.thingsboard.rule.engine.api.TbRelationTypes.SUCCESS;
-import static org.thingsboard.server.common.data.kv.Aggregation.NONE;
 
 @Slf4j
 @RuleNode(type = ComponentType.ENRICHMENT,
@@ -55,7 +52,6 @@ public class TbGetTelemetryForEntityNode implements TbNode {
     private String outputKey;
     private int limit;
     private Aggregation aggregation;
-    private DeviceRelationsQuery deviceRelationsQuery;
 
     @Override
     public void init(TbContext ctx, TbNodeConfiguration configuration) throws TbNodeException {
@@ -89,10 +85,10 @@ public class TbGetTelemetryForEntityNode implements TbNode {
                             }
                         }, error -> ctx.tellFailure(msg, error), ctx.getDbCallbackExecutor());
                     }
-                    double result = process(telemetryData);
+                    //double result = process(telemetryData);
                     TbMsg newMsg = null;
                     try {
-                        newMsg = ctx.newMsg(msg.getType(), msg.getOriginator(), msg.getMetaData(), mapper.writeValueAsString(mapper.createObjectNode().put(outputKey, result)));
+                        newMsg = ctx.newMsg(msg.getType(), msg.getOriginator(), msg.getMetaData(), mapper.writeValueAsString(mapper.createObjectNode().put("telemetrydata", telemetryData.toString())));
                     } catch (JsonProcessingException e) {
                         ctx.tellFailure(msg, e);
                     }
@@ -111,7 +107,7 @@ public class TbGetTelemetryForEntityNode implements TbNode {
     }
 
     private ReadTsKvQuery buildQueries(TbMsg msg) {
-        return new BaseReadTsKvQuery(inputKey, getInterval(msg).getStartTs(), getInterval(msg).getEndTs(), 1, limit, NONE, ASC_ORDER);
+        return new BaseReadTsKvQuery(inputKey, getInterval(msg).getStartTs(), getInterval(msg).getEndTs(), getInterval(msg).getEndTs() - getInterval(msg).getStartTs(), limit, Aggregation.SUM, ASC_ORDER);
     }
 
     private double process(List<TsKvEntry> entries) {
@@ -122,8 +118,6 @@ public class TbGetTelemetryForEntityNode implements TbNode {
         if (resultNode.has(inputKey)) {
             data.put(inputKey, resultNode.get(inputKey));
         }
-
-
         double sum = 0;
         double min = data.get(inputKey).get(0).get("value").asDouble();
         double max = data.get(inputKey).get(0).get("value").asDouble();
