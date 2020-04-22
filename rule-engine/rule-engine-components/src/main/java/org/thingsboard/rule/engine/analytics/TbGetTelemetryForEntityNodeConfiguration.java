@@ -33,9 +33,4 @@ public class TbGetTelemetryForEntityNodeConfiguration implements NodeConfigurati
         return configuration;
     }
 
-    public Aggregation getAggregation() {
-        if (aggregateFunction != null)
-            return Aggregation.valueOf(aggregateFunction);
-        return Aggregation.SUM;
-    }
 }
