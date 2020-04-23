@@ -78,13 +78,23 @@ public class TbGetTelemetryForEntityNode implements TbNode {
             withCallback(devices, deviceList -> {
                 try {
                     List<TsKvEntry> telemetryData = Collections.synchronizedList(new ArrayList<>());
+                    List<ReadTsKvQuery> queries = new ArrayList<>();
+                    String[] inputKeys = config.getInputKey().split(";");
+                    String[] outputKeys = config.getOutputKey().split(";");
+                    for (String key: inputKeys) {
+                        queries.add(buildQueries(msg, key));
+                    }
                     for (Device device: deviceList) {
-                        ListenableFuture<List<TsKvEntry>> list = ctx.getTimeseriesService().findAll(ctx.getTenantId(), device.getId(), Collections.singletonList(buildQueries(msg)));
+                        ListenableFuture<List<TsKvEntry>> list = ctx.getTimeseriesService().findAll(ctx.getTenantId(), device.getId(), queries);
                         telemetryData.addAll(list.get());
                     }
-                    Double aggregatedValue = aggregateTelemetry(telemetryData);
+                    ObjectNode aggregatedNode = mapper.createObjectNode();
+                    for (int i = 0; i < inputKeys.length; i++) {
+                        Double aggregatedValue = aggregateTelemetry(telemetryData, inputKeys[i]);
+                        aggregatedNode.put(outputKeys[i], aggregatedValue);
+                    }
                     TbMsgMetaData metaData = new TbMsgMetaData();
-                    String data = mapper.writeValueAsString(mapper.createObjectNode().put(config.getOutputKey(), aggregatedValue));
+                    String data = mapper.writeValueAsString(aggregatedNode);
                     TbMsg newMsg = ctx.newMsg(msg.getType(), msg.getOriginator(), metaData, data);
                     ctx.tellNext(newMsg, SUCCESS);
                 } catch (InterruptedException | ExecutionException | JsonProcessingException e) {
@@ -100,13 +110,13 @@ public class TbGetTelemetryForEntityNode implements TbNode {
 
     }
 
-    private ReadTsKvQuery buildQueries(TbMsg msg) {
+    private ReadTsKvQuery buildQueries(TbMsg msg, String inputKey) {
         Interval interval = getInterval(msg);
-        return new BaseReadTsKvQuery(config.getInputKey(), interval.getStartTs(), interval.getEndTs(), interval.getEndTs() - interval.getStartTs(), 1, getAggregation(), ASC_ORDER);
+        return new BaseReadTsKvQuery(inputKey, interval.getStartTs(), interval.getEndTs(), interval.getEndTs() - interval.getStartTs(), 1, getAggregation(), ASC_ORDER);
     }
 
-    private double aggregateTelemetry(List<TsKvEntry> entries) {
-        DoubleStream stream = entries.stream().mapToDouble(this::getDoubleValueFromEntity);
+    private double aggregateTelemetry(List<TsKvEntry> entries, String inputKey) {
+        DoubleStream stream = entries.stream().filter(entry -> entry.getKey().equals(inputKey)).mapToDouble(this::getDoubleValueFromEntity);
         switch (getAggregation()) {
             case AVG: return stream.average().getAsDouble();
             case MIN: return stream.min().getAsDouble();
