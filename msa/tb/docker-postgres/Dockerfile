@@ -27,14 +27,15 @@ RUN update-rc.d postgresql disable
 RUN mkdir -p /var/log/postgres
 RUN chown -R postgres:postgres /var/log/postgres
 
-COPY logback.xml ${pkg.name}.conf start-db.sh stop-db.sh start-tb.sh upgrade-tb.sh install-tb.sh ${pkg.name}.deb /tmp/
+COPY logback.xml ${pkg.name}.conf start-db.sh stop-db.sh start-tb.sh upgrade-tb.sh install-tb.sh restore-db.sh ${pkg.name}.deb /tmp/
 
 RUN chmod a+x /tmp/*.sh \
     && mv /tmp/start-tb.sh /usr/bin \
     && mv /tmp/upgrade-tb.sh /usr/bin \
     && mv /tmp/install-tb.sh /usr/bin \
     && mv /tmp/start-db.sh /usr/bin \
-    && mv /tmp/stop-db.sh /usr/bin
+    && mv /tmp/stop-db.sh /usr/bin \
+    && mv /tmp/restore-db.sh /usr/bin
 
 RUN dpkg -i /tmp/${pkg.name}.deb
 
