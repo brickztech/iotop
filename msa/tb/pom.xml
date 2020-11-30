@@ -35,13 +35,14 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <main.dir>${basedir}/../..</main.dir>
         <pkg.name>thingsboard</pkg.name>
-        <tb.docker.name>iotop_pg11</tb.docker.name>
-        <tb-postgres.docker.name>iotop-postgres</tb-postgres.docker.name>
+        <tb.docker.name>iotop</tb.docker.name>
+        <tb-postgres.docker.name>iotop-postgres-11</tb-postgres.docker.name>
         <tb-cassandra.docker.name>iotop-cassandra</tb-cassandra.docker.name>
         <pkg.user>thingsboard</pkg.user>
         <pkg.installFolder>/usr/share/${pkg.name}</pkg.installFolder>
         <pkg.upgradeVersion>2.4.2</pkg.upgradeVersion>
         <dockerfile.cassandra.skip>true</dockerfile.cassandra.skip>
+        <dockerfile.postgres.skip>false</dockerfile.postgres.skip>
     </properties>
 
     <dependencies>
@@ -192,7 +193,6 @@
                 <executions>
                     <execution>
                         <id>build-docker-tb-image</id>
-                        <phase>pre-integration-test</phase>
                         <goals>
                             <goal>build</goal>
                         </goals>
@@ -206,7 +206,6 @@
                     </execution>
                     <execution>
                         <id>tag-docker-tb-image</id>
-                        <phase>pre-integration-test</phase>
                         <goals>
                             <goal>tag</goal>
                         </goals>
@@ -218,12 +217,11 @@
                     </execution>
                     <execution>
                         <id>build-docker-tb-postgres-image</id>
-                        <phase>pre-integration-test</phase>
                         <goals>
                             <goal>build</goal>
                         </goals>
                         <configuration>
-                            <skip>${dockerfile.skip}</skip>
+                            <skip>${dockerfile.postgres.skip}</skip>
                             <repository>${docker.repo}/${tb-postgres.docker.name}</repository>
                             <verbose>true</verbose>
                             <googleContainerRegistryEnabled>false</googleContainerRegistryEnabled>
@@ -237,14 +235,13 @@
                             <goal>tag</goal>
                         </goals>
                         <configuration>
-                            <skip>${dockerfile.skip}</skip>
+                            <skip>${dockerfile.postgres.skip}</skip>
                             <repository>${docker.repo}/${tb-postgres.docker.name}</repository>
                             <tag>${project.version}</tag>
                         </configuration>
                     </execution>
                     <execution>
                         <id>build-docker-tb-cassandra-image</id>
-                        <phase>pre-integration-test</phase>
                         <goals>
                             <goal>build</goal>
                         </goals>
@@ -258,7 +255,6 @@
                     </execution>
                     <execution>
                         <id>tag-docker-tb-cassandra-image</id>
-                        <phase>pre-integration-test</phase>
                         <goals>
                             <goal>tag</goal>
                         </goals>
