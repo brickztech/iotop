@@ -22,7 +22,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.brickztech</groupId>
-        <version>1.0.2-SNAPSHOT</version>
+        <version>2.4.3</version>
         <artifactId>rule-engine</artifactId>
     </parent>
     <groupId>com.brickztech.rule-engine</groupId>

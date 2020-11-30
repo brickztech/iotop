@@ -20,7 +20,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.brickztech</groupId>
     <artifactId>iotop</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>2.4.3</version>
     <packaging>pom</packaging>
 
     <name>IoToP</name>
