@@ -25,11 +25,10 @@ import org.thingsboard.rule.engine.api.TbContext;
 import org.thingsboard.rule.engine.api.TbNode;
 import org.thingsboard.rule.engine.api.TbNodeConfiguration;
 import org.thingsboard.rule.engine.api.TbNodeException;
+import org.thingsboard.server.common.data.DataConstants;
 import org.thingsboard.server.common.data.alarm.Alarm;
 import org.thingsboard.server.common.msg.TbMsg;
 import org.thingsboard.server.common.msg.TbMsgMetaData;
-
-import javax.script.ScriptException;
 
 import static org.thingsboard.common.util.DonAsynchron.withCallback;
 
@@ -63,16 +62,16 @@ public abstract class TbAbstractAlarmNode<C extends TbAbstractAlarmNodeConfigura
                     if (alarmResult.alarm == null) {
                         ctx.tellNext(msg, "False");
                     } else if (alarmResult.isCreated) {
-                        ctx.tellNext(toAlarmMsg(ctx, alarmResult, msg), "Created");
-                        ctx.sendTbMsgToRuleEngine(ctx.alarmCreatedMsg(alarmResult.alarm, ctx.getSelfId()));
+                        tellNext(ctx, msg, alarmResult, DataConstants.ENTITY_CREATED, "Created");
                     } else if (alarmResult.isUpdated) {
-                        ctx.tellNext(toAlarmMsg(ctx, alarmResult, msg), "Updated");
+                        tellNext(ctx, msg, alarmResult, DataConstants.ENTITY_UPDATED, "Updated");
                     } else if (alarmResult.isCleared) {
-                        ctx.tellNext(toAlarmMsg(ctx, alarmResult, msg), "Cleared");
+                        tellNext(ctx, msg, alarmResult, DataConstants.ALARM_CLEAR, "Cleared");
+                    } else {
+                        ctx.tellSuccess(msg);
                     }
                 },
-                t -> ctx.tellFailure(msg, t)
-                , ctx.getDbCallbackExecutor());
+                t -> ctx.tellFailure(msg, t), ctx.getDbCallbackExecutor());
     }
 
     protected abstract ListenableFuture<AlarmResult> processAlarm(TbContext ctx, TbMsg msg);
@@ -125,5 +124,11 @@ public abstract class TbAbstractAlarmNode<C extends TbAbstractAlarmNodeConfigura
             this.isCleared = isCleared;
             this.alarm = alarm;
         }
+    }
+
+    private void tellNext(TbContext ctx, TbMsg msg, AlarmResult alarmResult, String alarmAction, String alarmResultMsgType) {
+        ctx.enqueue(ctx.alarmActionMsg(alarmResult.alarm, ctx.getSelfId(), alarmAction),
+                () -> ctx.tellNext(toAlarmMsg(ctx, alarmResult, msg), alarmResultMsgType),
+                throwable -> ctx.tellFailure(toAlarmMsg(ctx, alarmResult, msg), throwable));
     }
 }

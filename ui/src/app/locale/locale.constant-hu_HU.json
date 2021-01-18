@@ -51,7 +51,8 @@
         "share-via": "Megosztás ezen a felületen {{provider}}",
         "continue": "Folytatás",
         "discard-changes": "Változtatások eldobása",
-        "export-data": "Adatok letöltése"
+        "export-data": "Adatok letöltése",
+        "download": "Letöltés"
     },
     "aggregation": {
         "aggregation": "Aggregation",
@@ -74,8 +75,10 @@
         "test-mail-sent": "Teszt email sikeresen elküldve!",
         "base-url": "Base URL",
         "base-url-required": "Base URL is required.",
-        "mail-from": "Üzenet feladója",
-        "mail-from-required": "Az üzenet feladójának megadása kötelező!",
+        "prohibit-different-url": "Prohibit to use hostname from the client request headers",
+        "prohibit-different-url-hint": "This setting should be enabled for production environments. May cause security issues when disabled",
+        "mail-from": "Mail From",
+        "mail-from-required": "Mail From is required.",
         "smtp-protocol": "SMTP protocol",
         "smtp-host": "SMTP host",
         "smtp-host-required": "SMTP host is required.",
@@ -206,6 +209,7 @@
         "entity-filter-no-entity-matched": "No entities matching specified filter were found.",
         "no-entity-filter-specified": "No entity filter specified",
         "root-state-entity": "Use dashboard state entity as root",
+        "last-level-relation": "Fetch last level relation only",
         "root-entity": "Root entity",
         "state-entity-parameter-name": "State entity parameter name",
         "default-state-entity": "Default state entity",
@@ -346,7 +350,9 @@
         "action-data": "Action data",
         "failure-details": "Hiba részletei",
         "search": "Search audit logs",
-        "clear-search": "Clear search"
+        "clear-search": "Clear search",
+        "type-assigned-from-tenant": "Assigned from Tenant",
+        "type-assigned-to-tenant": "Assigned to Tenant"
     },
     "confirm-on-exit": {
         "message": "Vannak mentetlen változtatásai. Biztos hogy el szeretné hagyni ezt az oldalt?",
@@ -808,6 +814,7 @@
         "list-of-rulenodes": "{ count, plural, 1 {One rule node} other {List of # rule nodes} }",
         "rulenode-name-starts-with": "Rule nodes whose names start with '{{prefix}}'",
         "type-current-customer": "Current Customer",
+        "type-current-tenant": "Current Tenant",
         "search": "Search entities",
         "selected-entities": "{ count, plural, 1 {1 entity} other {# entities} } selected",
         "entity-name": "Entity name",
@@ -1125,6 +1132,85 @@
     "function": {
         "function": "Function"
     },
+    "gateway": {
+        "add-entry": "Add configuration",
+        "connector-add": "Add new connector",
+        "connector-enabled": "Enable connector",
+        "connector-name": "Connector name",
+        "connector-name-required": "Connector name is required.",
+        "connector-type": "Connector type",
+        "connector-type-required": "Connector type is required.",
+        "connectors": "Connectors configuration",
+        "create-new-gateway": "Create a new gateway",
+        "create-new-gateway-text": "Are you sure you want create a new gateway with name: '{{gatewayName}}'?",
+        "delete": "Delete configuration",
+        "download-tip": "Download configuration file",
+        "gateway": "Gateway",
+        "gateway-exists": "Device with same name is already exists.",
+        "gateway-name": "Gateway name",
+        "gateway-name-required": "Gateway name is required.",
+        "gateway-saved": "Gateway configuration successfully saved.",
+        "json-parse": "Not valid JSON.",
+        "json-required": "Field cannot be empty.",
+        "no-connectors": "No connectors",
+        "no-data": "No configurations",
+        "no-gateway-found": "No gateway found.",
+        "no-gateway-matching": " '{{item}}' not found.",
+        "path-logs": "Path to log files",
+        "path-logs-required": "Path is required.",
+        "remote": "Remote configuration",
+        "remote-logging-level": "Logging level",
+        "remove-entry": "Remove configuration",
+        "save-tip": "Save configuration file",
+        "security-type": "Security type",
+        "security-types": {
+            "access-token": "Access Token",
+            "tls": "TLS"
+        },
+        "storage": "Storage",
+        "storage-max-file-records": "Maximum records in file",
+        "storage-max-files": "Maximum number of files",
+        "storage-max-files-min": "Minimum number is 1.",
+        "storage-max-files-pattern": "Number is not valid.",
+        "storage-max-files-required": "Number is required.",
+        "storage-max-records": "Maximum records in storage",
+        "storage-max-records-min": "Minimum number of records is 1.",
+        "storage-max-records-pattern": "Number is not valid.",
+        "storage-max-records-required": "Maximum records is required.",
+        "storage-pack-size": "Maximum event pack size",
+        "storage-pack-size-min": "Minimum number is 1.",
+        "storage-pack-size-pattern": "Number is not valid.",
+        "storage-pack-size-required": "Maximum event pack size is required.",
+        "storage-path": "Storage path",
+        "storage-path-required": "Storage path is required.",
+        "storage-type": "Storage type",
+        "storage-types": {
+            "file-storage": "File storage",
+            "memory-storage": "Memory storage"
+        },
+        "thingsboard": "ThingsBoard",
+        "thingsboard-host": "ThingsBoard host",
+        "thingsboard-host-required": "Host is required.",
+        "thingsboard-port": "ThingsBoard port",
+        "thingsboard-port-max": "Maximum port number is 65535.",
+        "thingsboard-port-min": "Minimum port number is 1.",
+        "thingsboard-port-pattern": "Port is not valid.",
+        "thingsboard-port-required": "Port is required.",
+        "tidy": "Tidy",
+        "tidy-tip": "Tidy config JSON",
+        "title-connectors-json": "Connector {{typeName}} configuration",
+        "tls-path-ca-certificate": "Path to CA certificate on gateway",
+        "tls-path-client-certificate": "Path to client certificate on gateway",
+        "tls-path-private-key": "Path to private key on gateway",
+        "toggle-fullscreen": "Toggle fullscreen",
+        "transformer-json-config": "Configuration JSON*",
+        "update-config": "Add/update configuration JSON",
+        "state-title": "Gateway state",
+        "show-config-tip": "Show gateway configuration",
+        "title-show-config": "Show gateway configuration",
+        "read-only": "Read only",
+        "read-write": ""
+    },
     "grid": {
         "delete-item-title": "Biztos hogy ki szeretné törölni ezt az elemet?",
         "delete-item-text": "Vigyázzon, jóváhagyása után az elem és minden hozzá tartozó adat végleg elvész.",
@@ -1172,7 +1258,9 @@
             "server-attribute": "Server attribute",
             "timeseries": "Timeseries",
             "entity-field": "Entity field",
-            "access-token": "Access token"
+            "access-token": "Access token",
+            "isgateway": "Is Gateway",
+            "description": "Description"
         },
         "stepper-text":{
             "select-file": "Select a file",
@@ -1193,7 +1281,8 @@
     "js-func": {
         "no-return-error": "Function must return value!",
         "return-type-mismatch": "Function must return value of '{{type}}' type!",
-        "tidy": "Tidy"
+        "tidy": "Tidy",
+        "mini": "Mini"
     },
     "key-val": {
         "key": "Key",
@@ -1246,7 +1335,10 @@
         "new-password": "Új jelszó",
         "new-password-again": "Új jelszó ismét",
         "password-link-sent-message": "A jelszó visszaállító link sikeresen elküldésre került!",
-        "email": "Email"
+        "email": "Email",
+        "login-with": "Login with {{name}}",
+        "or": "or",
+        "error": "Login error"
     },
     "position": {
         "top": "Top",
@@ -1403,6 +1495,11 @@
         "help": "Segítség",
         "reset-debug-mode": "Reset debug mode in all nodes"
     },
+    "queue": {
+        "select_name": "Select queue name",
+        "name": "Queue Name",
+        "name_required": "Queue name is required!"
+    },
     "tenant": {
         "tenant": "Tenant",
         "tenants": "Tenants",
@@ -1428,7 +1525,11 @@
         "idCopiedMessage": "Tenant Id has been copied to clipboard",
         "select-tenant": "Select tenant",
         "no-tenants-matching": "No tenants matching '{{entity}}' were found.",
-        "tenant-required": "Tenant is required"
+        "tenant-required": "Tenant is required",
+        "isolated-tb-core": "Processing in isolated ThingsBoard Core container",
+        "isolated-tb-rule-engine": "Processing in isolated ThingsBoard Rule Engine container",
+        "isolated-tb-core-details": "Requires separate microservice(s) per isolated Tenant",
+        "isolated-tb-rule-engine-details": "Requires separate microservice(s) per isolated Tenant"
     },
     "timeinterval": {
         "seconds-interval": "{ seconds, plural, 1 {1 second} other {# seconds} }",
@@ -1516,7 +1617,9 @@
         "boolean-value": "Boolean value",
         "false": "False",
         "true": "True",
-        "long": "Long"
+        "long": "Long",
+        "json": "JSON",
+        "json-value": "JSON value"
     },
     "widget": {
         "widget-library": "Megjelenítőelemek",
@@ -1791,24 +1894,6 @@
         }
     },
     "language": {
-        "language": "Nyelv",
-        "locales": {
-            "de_DE": "Német",
-            "fr_FR": "Francia",
-            "zh_CN": "Egyszerűsített kínai",
-            "zh_TW": "Hagyományos kínai",
-            "en_US": "Angol",
-            "it_IT": "Olasz",
-            "ko_KR": "Koreai",
-            "ru_RU": "Orosz",
-            "es_ES": "Spanyol",
-            "ja_JA": "Japán",
-            "tr_TR": "Török",
-            "fa_IR": "Perzsa",
-            "uk_UA": "Ukrán",
-            "cs_CZ": "Cseh",
-            "el_GR": "Görög",
-            "hu_HU": "Magyar"
-        }
+        "language": "Nyelv"
     }
 }

@@ -222,6 +222,12 @@ export default angular.module('thingsboard.types', [])
                 },
                 "LOCKOUT": {
                     name: "audit-log.type-lockout"
+                },
+                "ASSIGNED_FROM_TENANT": {
+                    name: "audit-log.type-assigned-from-tenant"
+                },
+                "ASSIGNED_TO_TENANT": {
+                    name: "audit-log.type-assigned-to-tenant"
                 }
             },
             auditLogActionStatus: {
@@ -397,10 +403,19 @@ export default angular.module('thingsboard.types', [])
                 accessToken: {
                     name: 'import.column-type.access-token',
                     value: 'ACCESS_TOKEN'
+                },
+                isGateway: {
+                    name: 'import.column-type.isgateway',
+                    value: 'gateway'
+                },
+                description: {
+                    name: 'import.column-type.description',
+                    value: 'description'
                 }
             },
             aliasEntityType: {
-                current_customer: "CURRENT_CUSTOMER"
+                current_customer: "CURRENT_CUSTOMER",
+                current_tenant: "CURRENT_TENANT"
             },
             entityTypeTranslations: {
                 "DEVICE": {
@@ -466,6 +481,10 @@ export default angular.module('thingsboard.types', [])
                 "CURRENT_CUSTOMER": {
                     type: 'entity.type-current-customer',
                     list: 'entity.type-current-customer'
+                },
+                "CURRENT_TENANT": {
+                    type: 'entity.type-current-tenant',
+                    list: 'entity.type-current-tenant'
                 }
             },
             entityField: {
@@ -583,6 +602,48 @@ export default angular.module('thingsboard.types', [])
                 mqtt: "MQTT",
                 opc: "OPC UA",
                 modbus: "MODBUS"
+            },
+            gatewayConfigType: {
+                mqtt:  {
+                    value: "mqtt",
+                    name: "MQTT"
+                },
+                modbus:  {
+                    value: "modbus",
+                    name: "Modbus"
+                },
+                opcua:  {
+                    value: "opcua",
+                    name: "OPC-UA"
+                },
+                ble:  {
+                    value: "ble",
+                    name: "BLE"
+                },
+                request:  {
+                    value: "request",
+                    name: "Request"
+                },
+                can:  {
+                    value: "can",
+                    name: "CAN"
+                },
+                bacnet: {
+                    value: "bacnet",
+                    name: "BACnet"
+                },
+                custom:  {
+                    value: "custom",
+                    name: "Custom"
+                }
+            },
+            gatewayLogLevel: {
+                none: "NONE",
+                critical: "CRITICAL",
+                error: "ERROR",
+                warning: "WARNING",
+                info: "INFO",
+                debug: "DEBUG"
             },
             extensionValueType: {
                 string: 'value.string',
@@ -847,6 +908,11 @@ export default angular.module('thingsboard.types', [])
                     value: "boolean",
                     name: "value.boolean",
                     icon: "mdi:checkbox-marked-outline"
+                },
+                json: {
+                    value: "json",
+                    name: "value.json",
+                    icon: "mdi:json"
                 }
             },
             widgetType: {

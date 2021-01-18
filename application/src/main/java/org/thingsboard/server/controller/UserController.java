@@ -44,6 +44,7 @@ import org.thingsboard.server.common.data.page.TextPageData;
 import org.thingsboard.server.common.data.page.TextPageLink;
 import org.thingsboard.server.common.data.security.Authority;
 import org.thingsboard.server.common.data.security.UserCredentials;
+import org.thingsboard.server.queue.util.TbCoreComponent;
 import org.thingsboard.server.service.security.auth.jwt.RefreshTokenRepository;
 import org.thingsboard.server.service.security.model.SecurityUser;
 import org.thingsboard.server.service.security.model.UserPrincipal;
@@ -51,10 +52,13 @@ import org.thingsboard.server.service.security.model.token.JwtToken;
 import org.thingsboard.server.service.security.model.token.JwtTokenFactory;
 import org.thingsboard.server.service.security.permission.Operation;
 import org.thingsboard.server.service.security.permission.Resource;
+import org.thingsboard.server.service.security.system.SystemSecurityService;
+import org.thingsboard.server.utils.MiscUtils;
 
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
+@TbCoreComponent
 @RequestMapping("/api")
 public class UserController extends BaseController {
 
@@ -74,6 +78,9 @@ public class UserController extends BaseController {
 
     @Autowired
     private RefreshTokenRepository refreshTokenRepository;
+
+    @Autowired
+    private SystemSecurityService systemSecurityService;
 
 
     @PreAuthorize("hasAnyAuthority('SYS_ADMIN', 'TENANT_ADMIN', 'CUSTOMER_USER')")
@@ -129,24 +136,20 @@ public class UserController extends BaseController {
     @ResponseBody
     public User saveUser(@RequestBody User user,
                          @RequestParam(required = false, defaultValue = "true") boolean sendActivationMail,
-            HttpServletRequest request) throws ThingsboardException {
+                         HttpServletRequest request) throws ThingsboardException {
         try {
-
             if (getCurrentUser().getAuthority() == Authority.TENANT_ADMIN) {
                 user.setTenantId(getCurrentUser().getTenantId());
             }
 
-            Operation operation = user.getId() == null ? Operation.CREATE : Operation.WRITE;
-
-            accessControlService.checkPermission(getCurrentUser(), Resource.USER, operation,
-                    user.getId(), user);
+            checkEntity(user.getId(), user, Resource.USER);
 
             boolean sendEmail = user.getId() == null && sendActivationMail;
             User savedUser = checkNotNull(userService.saveUser(user));
             if (sendEmail) {
                 SecurityUser authUser = getCurrentUser();
                 UserCredentials userCredentials = userService.findUserCredentialsByUserId(authUser.getTenantId(), savedUser.getId());
-                String baseUrl = constructBaseUrl(request);
+                String baseUrl = systemSecurityService.getBaseUrl(getTenantId(), getCurrentUser().getCustomerId(), request);
                 String activateUrl = String.format(ACTIVATE_URL_PATTERN, baseUrl,
                         userCredentials.getActivateToken());
                 String email = savedUser.getEmail();
@@ -186,7 +189,7 @@ public class UserController extends BaseController {
 
             UserCredentials userCredentials = userService.findUserCredentialsByUserId(getCurrentUser().getTenantId(), user.getId());
             if (!userCredentials.isEnabled()) {
-                String baseUrl = constructBaseUrl(request);
+                String baseUrl = systemSecurityService.getBaseUrl(getTenantId(), getCurrentUser().getCustomerId(), request);
                 String activateUrl = String.format(ACTIVATE_URL_PATTERN, baseUrl,
                         userCredentials.getActivateToken());
                 mailService.sendActivationEmail(activateUrl, email);
@@ -211,7 +214,7 @@ public class UserController extends BaseController {
             SecurityUser authUser = getCurrentUser();
             UserCredentials userCredentials = userService.findUserCredentialsByUserId(authUser.getTenantId(), user.getId());
             if (!userCredentials.isEnabled()) {
-                String baseUrl = constructBaseUrl(request);
+                String baseUrl = systemSecurityService.getBaseUrl(getTenantId(), getCurrentUser().getCustomerId(), request);
                 String activateUrl = String.format(ACTIVATE_URL_PATTERN, baseUrl,
                         userCredentials.getActivateToken());
                 return activateUrl;
@@ -247,7 +250,7 @@ public class UserController extends BaseController {
     }
 
     @PreAuthorize("hasAuthority('SYS_ADMIN')")
-    @RequestMapping(value = "/tenant/{tenantId}/users", params = { "limit" }, method = RequestMethod.GET)
+    @RequestMapping(value = "/tenant/{tenantId}/users", params = {"limit"}, method = RequestMethod.GET)
     @ResponseBody
     public TextPageData<User> getTenantAdmins(
             @PathVariable("tenantId") String strTenantId,
@@ -266,7 +269,7 @@ public class UserController extends BaseController {
     }
 
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
-    @RequestMapping(value = "/customer/{customerId}/users", params = { "limit" }, method = RequestMethod.GET)
+    @RequestMapping(value = "/customer/{customerId}/users", params = {"limit"}, method = RequestMethod.GET)
     @ResponseBody
     public TextPageData<User> getCustomerUsers(
             @PathVariable("customerId") String strCustomerId,

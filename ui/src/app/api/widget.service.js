@@ -30,6 +30,8 @@ import thingsboardIFrameWidget from '../widget/lib/iframe-widget';
 
 import thingsboardRpcWidgets from '../widget/lib/rpc';
 
+import thingsboardJsonToString from '../components/tb-json-to-string.directive';
+
 import TbFlot from '../widget/lib/flot-widget';
 import IotopFlot from '../widget/lib/flot-widget_iotop';
 import TbAnalogueLinearGauge from '../widget/lib/analogue-linear-gauge';
@@ -54,7 +56,7 @@ export default angular.module('thingsboard.api.widget', ['oc.lazyLoad', thingsbo
     thingsboardTimeseriesTableWidget, thingsboardAlarmsTableWidget, thingsboardEntitiesTableWidget,
     thingsboardEntitiesHierarchyWidget, thingsboardExtensionsTableWidget, thingsboardDateRangeNavigatorWidget,
     thingsboardMultipleInputWidget, thingsboardWebCameraInputWidget, thingsboardRpcWidgets, thingsboardTypes,
-    thingsboardUtils, TripAnimationWidget, thingsboardIFrameWidget])
+    thingsboardUtils, thingsboardJsonToString, TripAnimationWidget, thingsboardIFrameWidget])
     .factory('widgetService', WidgetService)
     .name;
 
