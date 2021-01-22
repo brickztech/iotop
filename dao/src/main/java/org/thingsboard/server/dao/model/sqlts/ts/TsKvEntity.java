@@ -39,6 +39,11 @@ public final class TsKvEntity extends AbstractTsKvEntity {
         this.strValue = strValue;
     }
 
+    public TsKvEntity(long ts, String strKey) {
+        this.ts = ts;
+        this.strKey = strKey;
+    }
+
     public TsKvEntity(Long longValue, Double doubleValue, Long longCountValue, Long doubleCountValue, String aggType) {
         if (!isAllNull(longValue, doubleValue, longCountValue, doubleCountValue)) {
             switch (aggType) {

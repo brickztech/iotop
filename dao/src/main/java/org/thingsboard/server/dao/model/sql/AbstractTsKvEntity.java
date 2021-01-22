@@ -45,6 +45,8 @@ import static org.thingsboard.server.dao.model.ModelConstants.TS_COLUMN;
 @MappedSuperclass
 public abstract class AbstractTsKvEntity implements ToData<TsKvEntry> {
 
+    public static final String JSON_DATA_KEY = "raw";
+
     protected static final String SUM = "SUM";
     protected static final String AVG = "AVG";
     protected static final String MIN = "MIN";

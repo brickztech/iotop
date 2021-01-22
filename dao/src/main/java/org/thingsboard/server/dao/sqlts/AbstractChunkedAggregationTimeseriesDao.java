@@ -17,28 +17,26 @@ package org.thingsboard.server.dao.sqlts;
 
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
-import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.SettableFuture;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.thingsboard.server.common.data.id.EntityId;
 import org.thingsboard.server.common.data.id.TenantId;
-import org.thingsboard.server.common.data.kv.Aggregation;
-import org.thingsboard.server.common.data.kv.DeleteTsKvQuery;
-import org.thingsboard.server.common.data.kv.ReadTsKvQuery;
-import org.thingsboard.server.common.data.kv.TsKvEntry;
+import org.thingsboard.server.common.data.kv.*;
 import org.thingsboard.server.common.stats.StatsFactory;
 import org.thingsboard.server.dao.DaoUtil;
 import org.thingsboard.server.dao.model.sqlts.ts.TsKvEntity;
-import org.thingsboard.server.dao.sql.TbSqlBlockingQueue;
 import org.thingsboard.server.dao.sql.TbSqlBlockingQueueParams;
 import org.thingsboard.server.dao.sql.TbSqlBlockingQueueWrapper;
 import org.thingsboard.server.dao.sqlts.insert.InsertTsRepository;
 import org.thingsboard.server.dao.sqlts.ts.TsKvRepository;
 import org.thingsboard.server.dao.timeseries.TimeseriesDao;
+import org.thingsboard.server.dao.util.JsonUtil;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -153,7 +151,7 @@ public abstract class AbstractChunkedAggregationTimeseriesDao extends AbstractSq
 
     @Override
     protected ListenableFuture<List<TsKvEntry>> findAllAsyncWithLimit(EntityId entityId, ReadTsKvQuery query) {
-        Integer keyId = getOrSaveKeyId(query.getKey());
+        Integer keyId = getOrSaveKeyId(TsKvEntity.JSON_DATA_KEY);
         List<TsKvEntity> tsKvEntities = tsKvRepository.findAllWithLimit(
                 entityId.getId(),
                 keyId,
@@ -162,8 +160,19 @@ public abstract class AbstractChunkedAggregationTimeseriesDao extends AbstractSq
                 PageRequest.of(0, query.getLimit(),
                         Sort.by(Sort.Direction.fromString(
                                 query.getOrderBy()), "ts")));
-        tsKvEntities.forEach(tsKvEntity -> tsKvEntity.setStrKey(query.getKey()));
-        return Futures.immediateFuture(DaoUtil.convertDataList(tsKvEntities));
+        return Futures.immediateFuture(DaoUtil.convertDataList(extractKeyFromJson(tsKvEntities, query.getKey())));
+    }
+
+    private List<TsKvEntity> extractKeyFromJson(List<TsKvEntity> tsKvEntities, String key) {
+        List<TsKvEntity> extracted = new ArrayList<>();
+        for (TsKvEntity entity: tsKvEntities) {
+            JsonObject jo = new Gson().fromJson(entity.getJsonValue(), JsonObject.class);
+//            TsKvEntity kvEntity = new TsKvEntity(entity.getTs(), key, jo.get(key).getAsString());
+            TsKvEntity kvEntity = new TsKvEntity(entity.getTs(), key);
+            JsonUtil.setValueFromJsonElement(jo.get(key), kvEntity);
+            extracted.add(kvEntity);
+        }
+        return extracted;
     }
 
     private ListenableFuture<Optional<TsKvEntry>> findAndAggregateAsync(EntityId entityId, String key, long startTs, long endTs, long ts, Aggregation aggregation) {
