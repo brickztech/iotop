@@ -22,7 +22,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.transaction.annotation.Transactional;
-import org.thingsboard.server.dao.model.sqlts.ts.TsKvAggregationCompositeKey;
 import org.thingsboard.server.dao.model.sqlts.ts.TsKvCompositeKey;
 import org.thingsboard.server.dao.model.sqlts.ts.TsKvEntity;
 import org.thingsboard.server.dao.util.SqlDao;
@@ -32,7 +31,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 @SqlDao
-public interface TsKvRepository extends CrudRepository<TsKvEntity, TsKvAggregationCompositeKey> {
+public interface TsKvRepository extends CrudRepository<TsKvEntity, TsKvCompositeKey> {
 
     @Query("SELECT tskv FROM TsKvEntity tskv WHERE tskv.entityId = :entityId " +
             "AND tskv.key = :entityKey AND tskv.ts > :startTs AND tskv.ts <= :endTs")
@@ -52,89 +51,94 @@ public interface TsKvRepository extends CrudRepository<TsKvEntity, TsKvAggregati
                 @Param("endTs") long endTs);
 
     @Async
-    @Query("SELECT new TsKvEntity(MAX(tskv.strValue)) FROM TsKvEntity tskv " +
-            "WHERE tskv.strValue IS NOT NULL " +
-            "AND tskv.entityId = :entityId AND tskv.key = :entityKey AND tskv.ts > :startTs AND tskv.ts <= :endTs")
+    @Query(value = "SELECT :entityId as entity_id, :entityKey as key, :startTs as ts, t.str_v, " +
+                   "       null as long_v, null as dbl_v, null as json_v, null as bool_v " +
+                   "  FROM (select max(json_v ->> :keyStr) as str_v from ts_kv " +
+                   "         where entity_id = :entityId AND key = :entityKey AND ts > :startTs AND ts <= :endTs " +
+                   "           and json_typeof(json_v -> :keyStr) = 'string') t ",
+            nativeQuery = true)
     CompletableFuture<TsKvEntity> findStringMax(@Param("entityId") UUID entityId,
                                                 @Param("entityKey") int entityKey,
+                                                @Param("keyStr") String keyStr,
                                                 @Param("startTs") long startTs,
                                                 @Param("endTs") long endTs);
 
     @Async
-    @Query("SELECT new TsKvEntity(MAX(COALESCE(tskv.longValue, -9223372036854775807)), " +
-            "MAX(COALESCE(tskv.doubleValue, -1.79769E+308)), " +
-            "SUM(CASE WHEN tskv.longValue IS NULL THEN 0 ELSE 1 END), " +
-            "SUM(CASE WHEN tskv.doubleValue IS NULL THEN 0 ELSE 1 END), " +
-            "'MAX') FROM TsKvEntity tskv " +
-            "WHERE tskv.entityId = :entityId AND tskv.key = :entityKey AND tskv.ts > :startTs AND tskv.ts <= :endTs")
+    @Query(value = "SELECT :entityId as entity_id, :entityKey as key, :startTs as ts, t.dbl_v, " +
+                   "       null as long_v, null as str_v, null as json_v, null as bool_v " +
+                   "  FROM (select max(cast(json_v ->> :keyStr as double precision)) as dbl_v from ts_kv " +
+                   "         where entity_id = :entityId AND key = :entityKey AND ts > :startTs AND ts <= :endTs " +
+                   "           and json_typeof(json_v -> :keyStr) = 'number') t ",
+            nativeQuery = true)
     CompletableFuture<TsKvEntity> findNumericMax(@Param("entityId") UUID entityId,
                                           @Param("entityKey") int entityKey,
+                                          @Param("keyStr") String keyStr,
                                           @Param("startTs") long startTs,
                                           @Param("endTs") long endTs);
 
 
     @Async
-    @Query("SELECT new TsKvEntity(MIN(tskv.strValue)) FROM TsKvEntity tskv " +
-            "WHERE tskv.strValue IS NOT NULL " +
-            "AND tskv.entityId = :entityId AND tskv.key = :entityKey AND tskv.ts > :startTs AND tskv.ts <= :endTs")
+    @Query(value = "SELECT :entityId as entity_id, :entityKey as key, :startTs as ts, t.str_v, " +
+                   "       null as long_v, null as dbl_v, null as json_v, null as bool_v " +
+                   "  FROM (select min(json_v ->> :keyStr) as str_v from ts_kv " +
+                   "         where entity_id = :entityId AND key = :entityKey AND ts > :startTs AND ts <= :endTs " +
+                   "           and json_typeof(json_v -> :keyStr) = 'string') t ",
+            nativeQuery = true)
     CompletableFuture<TsKvEntity> findStringMin(@Param("entityId") UUID entityId,
                                           @Param("entityKey") int entityKey,
+                                          @Param("keyStr") String keyStr,
                                           @Param("startTs") long startTs,
                                           @Param("endTs") long endTs);
 
     @Async
-    @Query("SELECT new TsKvEntity(MIN(COALESCE(tskv.longValue, 9223372036854775807)), " +
-            "MIN(COALESCE(tskv.doubleValue, 1.79769E+308)), " +
-            "SUM(CASE WHEN tskv.longValue IS NULL THEN 0 ELSE 1 END), " +
-            "SUM(CASE WHEN tskv.doubleValue IS NULL THEN 0 ELSE 1 END), " +
-            "'MIN') FROM TsKvEntity tskv " +
-            "WHERE tskv.entityId = :entityId AND tskv.key = :entityKey AND tskv.ts > :startTs AND tskv.ts <= :endTs")
+    @Query(value = "SELECT :entityId as entity_id, :entityKey as key, :startTs as ts, t.dbl_v, " +
+                   "       null as long_v, null as str_v, null as json_v, null as bool_v " +
+                   "  FROM (select min(cast(json_v ->> :keyStr as double precision)) as dbl_v from ts_kv " +
+                   "         where entity_id = :entityId AND key = :entityKey AND ts > :startTs AND ts <= :endTs " +
+                   "           and json_typeof(json_v -> :keyStr) = 'number') t ",
+            nativeQuery = true)
     CompletableFuture<TsKvEntity> findNumericMin(
                                           @Param("entityId") UUID entityId,
                                           @Param("entityKey") int entityKey,
+                                          @Param("keyStr") String keyStr,
                                           @Param("startTs") long startTs,
                                           @Param("endTs") long endTs);
 
     @Async
-    @Query("SELECT new TsKvEntity(SUM(CASE WHEN tskv.booleanValue IS NULL THEN 0 ELSE 1 END), " +
-            "SUM(CASE WHEN tskv.strValue IS NULL THEN 0 ELSE 1 END), " +
-            "SUM(CASE WHEN tskv.longValue IS NULL THEN 0 ELSE 1 END), " +
-            "SUM(CASE WHEN tskv.doubleValue IS NULL THEN 0 ELSE 1 END), " +
-            "SUM(CASE WHEN tskv.jsonValue IS NULL THEN 0 ELSE 1 END)) FROM TsKvEntity tskv " +
-            "WHERE tskv.entityId = :entityId AND tskv.key = :entityKey AND tskv.ts > :startTs AND tskv.ts <= :endTs")
+    @Query(value = "SELECT :entityId as entity_id, :entityKey as key, :startTs as ts, t.long_v, " +
+                   "       null as dbl_v, null as str_v, null as json_v, null as bool_v " +
+                   "  FROM (select sum(case when json_v -> :keyStr is null then 0 else 1 end) as long_v from ts_kv " +
+                   "         where entity_id = :entityId AND key = :entityKey AND ts > :startTs AND ts <= :endTs) t ",
+            nativeQuery = true)
     CompletableFuture<TsKvEntity> findCount(@Param("entityId") UUID entityId,
                                             @Param("entityKey") int entityKey,
+                                            @Param("keyStr") String keyStr,
                                             @Param("startTs") long startTs,
                                             @Param("endTs") long endTs);
 
     @Async
-//    @Query("SELECT new TsKvEntity(SUM(COALESCE(tskv.longValue, 0)), " +
-//            "SUM(COALESCE(tskv.doubleValue, 0.0)), " +
-//            "SUM(CASE WHEN tskv.longValue IS NULL THEN 0 ELSE 1 END), " +
-//            "SUM(CASE WHEN tskv.doubleValue IS NULL THEN 0 ELSE 1 END), " +
-//            "'AVG') FROM TsKvEntity tskv " +
-//            "WHERE tskv.entityId = :entityId AND tskv.key = :entityKey AND tskv.ts > :startTs AND tskv.ts <= :endTs")
-    @Query(value = "SELECT entity_id, key, min(ts) as ts, avg(cast(json_v ->> :keyStr as double precision)) as dbl_v, " +
-                   " null as bool_v, null as long_v, null as str_v, null as json_v " +
-                   " FROM ts_kv " +
-                   "WHERE entity_id = :entityId AND key = :entityKey AND ts > :startTs AND ts <= :endTs " +
-                   "GROUP BY entity_id, key",
+    @Query(value = "SELECT :entityId as entity_id, :entityKey as key, :startTs as ts, t.dbl_v, " +
+                   "       null as long_v, null as str_v, null as json_v, null as bool_v " +
+                   "  FROM (select avg(cast(json_v ->> :keyStr as double precision)) as dbl_v from ts_kv " +
+                   "         where entity_id = :entityId AND key = :entityKey AND ts > :startTs AND ts <= :endTs " +
+                   "           and json_typeof(json_v -> :keyStr) = 'number') t ",
            nativeQuery = true)
     CompletableFuture<TsKvEntity> findAvg(@Param("entityId") UUID entityId,
-                                                            @Param("entityKey") int entityKey,
-                                                            @Param("keyStr") String keyStr,
-                                                            @Param("startTs") long startTs,
-                                                            @Param("endTs") long endTs);
+                                          @Param("entityKey") int entityKey,
+                                          @Param("keyStr") String keyStr,
+                                          @Param("startTs") long startTs,
+                                          @Param("endTs") long endTs);
 
     @Async
-    @Query("SELECT new TsKvEntity(SUM(COALESCE(tskv.longValue, 0)), " +
-            "SUM(COALESCE(tskv.doubleValue, 0.0)), " +
-            "SUM(CASE WHEN tskv.longValue IS NULL THEN 0 ELSE 1 END), " +
-            "SUM(CASE WHEN tskv.doubleValue IS NULL THEN 0 ELSE 1 END), " +
-            "'SUM') FROM TsKvEntity tskv " +
-            "WHERE tskv.entityId = :entityId AND tskv.key = :entityKey AND tskv.ts > :startTs AND tskv.ts <= :endTs")
+    @Query(value = "SELECT :entityId as entity_id, :entityKey as key, :startTs as ts, t.dbl_v, " +
+                   "       null as long_v, null as str_v, null as json_v, null as bool_v " +
+                   "  FROM (select sum(cast(json_v ->> :keyStr as double precision)) as dbl_v from ts_kv " +
+                   "         where entity_id = :entityId AND key = :entityKey AND ts > :startTs AND ts <= :endTs " +
+                   "           and json_typeof(json_v -> :keyStr) = 'number') t ",
+            nativeQuery = true)
     CompletableFuture<TsKvEntity> findSum(@Param("entityId") UUID entityId,
                                           @Param("entityKey") int entityKey,
+                                          @Param("keyStr") String keyStr,
                                           @Param("startTs") long startTs,
                                           @Param("endTs") long endTs);
 

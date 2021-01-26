@@ -60,6 +60,7 @@ public abstract class AbstractChunkedAggregationTimeseriesDao extends AbstractSq
     protected InsertTsRepository<TsKvEntity> insertRepository;
 
     protected TbSqlBlockingQueueWrapper<TsKvEntity> tsQueue;
+
     @Autowired
     private StatsFactory statsFactory;
 
@@ -215,47 +216,53 @@ public abstract class AbstractChunkedAggregationTimeseriesDao extends AbstractSq
     }
 
     protected void findCount(EntityId entityId, String key, long startTs, long endTs, List<CompletableFuture<TsKvEntity>> entitiesFutures) {
-        Integer keyId = getOrSaveKeyId(key);
+        Integer keyId = getOrSaveKeyId(TsKvEntity.JSON_DATA_KEY);
         entitiesFutures.add(tsKvRepository.findCount(
                 entityId.getId(),
                 keyId,
+                key,
                 startTs,
                 endTs));
     }
 
     protected void findSum(EntityId entityId, String key, long startTs, long endTs, List<CompletableFuture<TsKvEntity>> entitiesFutures) {
-        Integer keyId = getOrSaveKeyId(key);
+        Integer keyId = getOrSaveKeyId(TsKvEntity.JSON_DATA_KEY);
         entitiesFutures.add(tsKvRepository.findSum(
                 entityId.getId(),
                 keyId,
+                key,
                 startTs,
                 endTs));
     }
 
     protected void findMin(EntityId entityId, String key, long startTs, long endTs, List<CompletableFuture<TsKvEntity>> entitiesFutures) {
-        Integer keyId = getOrSaveKeyId(key);
+        Integer keyId = getOrSaveKeyId(TsKvEntity.JSON_DATA_KEY);
         entitiesFutures.add(tsKvRepository.findStringMin(
                 entityId.getId(),
                 keyId,
+                key,
                 startTs,
                 endTs));
         entitiesFutures.add(tsKvRepository.findNumericMin(
                 entityId.getId(),
                 keyId,
+                key,
                 startTs,
                 endTs));
     }
 
     protected void findMax(EntityId entityId, String key, long startTs, long endTs, List<CompletableFuture<TsKvEntity>> entitiesFutures) {
-        Integer keyId = getOrSaveKeyId(key);
+        Integer keyId = getOrSaveKeyId(TsKvEntity.JSON_DATA_KEY);
         entitiesFutures.add(tsKvRepository.findStringMax(
                 entityId.getId(),
                 keyId,
+                key,
                 startTs,
                 endTs));
         entitiesFutures.add(tsKvRepository.findNumericMax(
                 entityId.getId(),
                 keyId,
+                key,
                 startTs,
                 endTs));
     }
