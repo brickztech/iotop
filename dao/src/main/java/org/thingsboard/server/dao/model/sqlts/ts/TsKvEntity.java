@@ -30,7 +30,7 @@ import static org.thingsboard.server.dao.model.ModelConstants.KEY_COLUMN;
 @Entity
 @Table(name = "ts_kv")
 @IdClass(TsKvCompositeKey.class)
-public final class TsKvEntity extends AbstractTsKvEntity {
+public class TsKvEntity extends AbstractTsKvEntity {
 
     public TsKvEntity() {
     }

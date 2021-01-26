@@ -27,7 +27,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.thingsboard.server.common.data.id.EntityId;
 import org.thingsboard.server.common.data.id.TenantId;
-import org.thingsboard.server.common.data.kv.*;
+import org.thingsboard.server.common.data.kv.Aggregation;
+import org.thingsboard.server.common.data.kv.DeleteTsKvQuery;
+import org.thingsboard.server.common.data.kv.ReadTsKvQuery;
+import org.thingsboard.server.common.data.kv.TsKvEntry;
 import org.thingsboard.server.common.stats.StatsFactory;
 import org.thingsboard.server.dao.DaoUtil;
 import org.thingsboard.server.dao.model.sqlts.ts.TsKvEntity;
@@ -167,7 +170,6 @@ public abstract class AbstractChunkedAggregationTimeseriesDao extends AbstractSq
         List<TsKvEntity> extracted = new ArrayList<>();
         for (TsKvEntity entity: tsKvEntities) {
             JsonObject jo = new Gson().fromJson(entity.getJsonValue(), JsonObject.class);
-//            TsKvEntity kvEntity = new TsKvEntity(entity.getTs(), key, jo.get(key).getAsString());
             TsKvEntity kvEntity = new TsKvEntity(entity.getTs(), key);
             JsonUtil.setValueFromJsonElement(jo.get(key), kvEntity);
             extracted.add(kvEntity);
@@ -259,10 +261,11 @@ public abstract class AbstractChunkedAggregationTimeseriesDao extends AbstractSq
     }
 
     protected void findAvg(EntityId entityId, String key, long startTs, long endTs, List<CompletableFuture<TsKvEntity>> entitiesFutures) {
-        Integer keyId = getOrSaveKeyId(key);
+        Integer keyId = getOrSaveKeyId(TsKvEntity.JSON_DATA_KEY);
         entitiesFutures.add(tsKvRepository.findAvg(
                 entityId.getId(),
                 keyId,
+                key,
                 startTs,
                 endTs));
     }

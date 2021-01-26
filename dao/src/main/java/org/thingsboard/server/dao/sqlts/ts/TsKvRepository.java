@@ -22,6 +22,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.transaction.annotation.Transactional;
+import org.thingsboard.server.dao.model.sqlts.ts.TsKvAggregationCompositeKey;
 import org.thingsboard.server.dao.model.sqlts.ts.TsKvCompositeKey;
 import org.thingsboard.server.dao.model.sqlts.ts.TsKvEntity;
 import org.thingsboard.server.dao.util.SqlDao;
@@ -31,7 +32,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 @SqlDao
-public interface TsKvRepository extends CrudRepository<TsKvEntity, TsKvCompositeKey> {
+public interface TsKvRepository extends CrudRepository<TsKvEntity, TsKvAggregationCompositeKey> {
 
     @Query("SELECT tskv FROM TsKvEntity tskv WHERE tskv.entityId = :entityId " +
             "AND tskv.key = :entityKey AND tskv.ts > :startTs AND tskv.ts <= :endTs")
@@ -107,16 +108,23 @@ public interface TsKvRepository extends CrudRepository<TsKvEntity, TsKvComposite
                                             @Param("endTs") long endTs);
 
     @Async
-    @Query("SELECT new TsKvEntity(SUM(COALESCE(tskv.longValue, 0)), " +
-            "SUM(COALESCE(tskv.doubleValue, 0.0)), " +
-            "SUM(CASE WHEN tskv.longValue IS NULL THEN 0 ELSE 1 END), " +
-            "SUM(CASE WHEN tskv.doubleValue IS NULL THEN 0 ELSE 1 END), " +
-            "'AVG') FROM TsKvEntity tskv " +
-            "WHERE tskv.entityId = :entityId AND tskv.key = :entityKey AND tskv.ts > :startTs AND tskv.ts <= :endTs")
+//    @Query("SELECT new TsKvEntity(SUM(COALESCE(tskv.longValue, 0)), " +
+//            "SUM(COALESCE(tskv.doubleValue, 0.0)), " +
+//            "SUM(CASE WHEN tskv.longValue IS NULL THEN 0 ELSE 1 END), " +
+//            "SUM(CASE WHEN tskv.doubleValue IS NULL THEN 0 ELSE 1 END), " +
+//            "'AVG') FROM TsKvEntity tskv " +
+//            "WHERE tskv.entityId = :entityId AND tskv.key = :entityKey AND tskv.ts > :startTs AND tskv.ts <= :endTs")
+    @Query(value = "SELECT entity_id, key, min(ts) as ts, avg(cast(json_v ->> :keyStr as double precision)) as dbl_v, " +
+                   " null as bool_v, null as long_v, null as str_v, null as json_v " +
+                   " FROM ts_kv " +
+                   "WHERE entity_id = :entityId AND key = :entityKey AND ts > :startTs AND ts <= :endTs " +
+                   "GROUP BY entity_id, key",
+           nativeQuery = true)
     CompletableFuture<TsKvEntity> findAvg(@Param("entityId") UUID entityId,
-                                          @Param("entityKey") int entityKey,
-                                          @Param("startTs") long startTs,
-                                          @Param("endTs") long endTs);
+                                                            @Param("entityKey") int entityKey,
+                                                            @Param("keyStr") String keyStr,
+                                                            @Param("startTs") long startTs,
+                                                            @Param("endTs") long endTs);
 
     @Async
     @Query("SELECT new TsKvEntity(SUM(COALESCE(tskv.longValue, 0)), " +
