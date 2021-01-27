@@ -300,6 +300,17 @@
         </dependency>
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>develop</id>
+            <properties>
+                <pkg.package.phase>none</pkg.package.phase>
+                <maven.test.skip>true</maven.test.skip>
+                <license.skip>true</license.skip>
+            </properties>
+        </profile>
+    </profiles>
+
     <build>
         <finalName>${pkg.name}-${project.version}</finalName>
         <resources>
