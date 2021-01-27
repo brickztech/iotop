@@ -29,6 +29,10 @@
 
     <properties>
         <main.dir>${basedir}</main.dir>
+        <pkg.name>thingsboard</pkg.name>
+        <pkg.type>java</pkg.type>
+        <pkg.mainClass>org.thingsboard.server.ThingsboardServerApplication</pkg.mainClass>
+        <pkg.copyInstallScripts>true</pkg.copyInstallScripts>
         <pkg.disabled>true</pkg.disabled>
         <pkg.process-resources.phase>none</pkg.process-resources.phase>
         <pkg.package.phase>none</pkg.package.phase>
