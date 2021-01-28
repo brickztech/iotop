@@ -114,8 +114,11 @@ public class DefaultTelemetrySubscriptionService implements TelemetrySubscriptio
     @Override
     public void saveAndNotify(TenantId tenantId, EntityId entityId, List<TsKvEntry> ts, long ttl, FutureCallback<Void> callback) {
         ListenableFuture<List<Void>> saveFuture = tsService.save(tenantId, entityId, getCollapsedEntryAsList(ts), ttl);
-        addMainCallback(saveFuture, callback);
-        addWsCallback(saveFuture, success -> onTimeSeriesUpdate(tenantId, entityId, ts));
+        saveFuture.addListener(() -> {
+            ListenableFuture<List<Void>> saveLatestFuture = tsService.saveLatest(tenantId, entityId, ts);
+            addMainCallback(saveLatestFuture, callback);
+            addWsCallback(saveLatestFuture, success -> onTimeSeriesUpdate(tenantId, entityId, ts));
+        }, tsCallBackExecutor);
     }
 
     private List<TsKvEntry> getCollapsedEntryAsList(List<TsKvEntry> entries) {

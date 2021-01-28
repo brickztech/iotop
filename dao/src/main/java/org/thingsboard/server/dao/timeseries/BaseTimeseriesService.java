@@ -27,14 +27,11 @@ import org.thingsboard.server.common.data.EntityView;
 import org.thingsboard.server.common.data.id.EntityId;
 import org.thingsboard.server.common.data.id.EntityViewId;
 import org.thingsboard.server.common.data.id.TenantId;
-import org.thingsboard.server.common.data.kv.Aggregation;
-import org.thingsboard.server.common.data.kv.BaseReadTsKvQuery;
-import org.thingsboard.server.common.data.kv.DeleteTsKvQuery;
-import org.thingsboard.server.common.data.kv.ReadTsKvQuery;
-import org.thingsboard.server.common.data.kv.TsKvEntry;
+import org.thingsboard.server.common.data.kv.*;
 import org.thingsboard.server.dao.entityview.EntityViewService;
 import org.thingsboard.server.dao.exception.IncorrectParameterException;
 import org.thingsboard.server.dao.service.Validator;
+import org.thingsboard.server.dao.util.JsonUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -146,12 +143,21 @@ public class BaseTimeseriesService implements TimeseriesService {
         return Futures.allAsList(futures);
     }
 
+    @Override
+    public ListenableFuture<List<Void>> saveLatest(TenantId tenantId, EntityId entityId, List<TsKvEntry> tsKvEntries) {
+        List<ListenableFuture<Void>> futures = Lists.newArrayListWithExpectedSize(tsKvEntries.size());
+        tsKvEntries.forEach(entry -> futures.add(timeseriesDao.saveLatest(tenantId, entityId, entry)));
+        return Futures.allAsList(futures);
+    }
+
     private void saveAndRegisterFutures(TenantId tenantId, List<ListenableFuture<Void>> futures, EntityId entityId, TsKvEntry tsKvEntry, long ttl) {
         if (entityId.getEntityType().equals(EntityType.ENTITY_VIEW)) {
             throw new IncorrectParameterException("Telemetry data can't be stored for entity view. Read only");
         }
         futures.add(timeseriesDao.savePartition(tenantId, entityId, tsKvEntry.getTs(), tsKvEntry.getKey(), ttl));
-        futures.add(timeseriesDao.saveLatest(tenantId, entityId, tsKvEntry));
+        if (!tsKvEntry.getJsonValue().isPresent()) {
+            futures.add(timeseriesDao.saveLatest(tenantId, entityId, tsKvEntry));
+        }
         futures.add(timeseriesDao.save(tenantId, entityId, tsKvEntry, ttl));
     }
 
