@@ -171,9 +171,11 @@ public abstract class AbstractChunkedAggregationTimeseriesDao extends AbstractSq
         List<TsKvEntity> extracted = new ArrayList<>();
         for (TsKvEntity entity: tsKvEntities) {
             JsonObject jo = new Gson().fromJson(entity.getJsonValue(), JsonObject.class);
-            TsKvEntity kvEntity = new TsKvEntity(entity.getTs(), key);
-            JsonUtil.setValueFromJsonElement(jo.get(key), kvEntity);
-            extracted.add(kvEntity);
+            if (jo.has(key)) {
+                TsKvEntity kvEntity = new TsKvEntity(entity.getTs(), key);
+                JsonUtil.setValueFromJsonElement(jo.get(key), kvEntity);
+                extracted.add(kvEntity);
+            }
         }
         return extracted;
     }
