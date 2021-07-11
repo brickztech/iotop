@@ -298,6 +298,10 @@
             <groupId>com.github.ua-parser</groupId>
             <artifactId>uap-java</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.custom-nodes.tb</groupId>
+            <artifactId>rule-engine</artifactId>
+        </dependency>
     </dependencies>
 
     <profiles>
