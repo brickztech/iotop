@@ -336,6 +336,11 @@
             <artifactId>Java-WebSocket</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.custom-nodes.tb</groupId>
+            <artifactId>rule-engine</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
     <profiles>
