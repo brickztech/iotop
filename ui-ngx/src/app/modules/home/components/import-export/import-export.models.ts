@@ -157,6 +157,11 @@ export const CSV_TYPE: FileType = {
   extension: 'csv'
 };
 
+export const TXT_TYPE: FileType = {
+  mimeType: 'text/csv',
+  extension: 'txt'
+};
+
 export function convertCSVToJson(csvdata: string, config: CsvToJsonConfig,
                                  onError: (messageId: string, params?: any) => void): CsvToJsonResult | number {
   config = config || {};

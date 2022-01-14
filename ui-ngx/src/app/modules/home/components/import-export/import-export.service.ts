@@ -44,8 +44,8 @@ import {
   EntityAliasesDialogData
 } from '@home/components/alias/entity-aliases-dialog.component';
 import { ItemBufferService, WidgetItem } from '@core/services/item-buffer.service';
-import { FileType, ImportWidgetResult, JSON_TYPE, WidgetsBundleItem, ZIP_TYPE, CSV_TYPE, BulkImportRequest, BulkImportResult } from './import-export.models';
-import { AliasEntityType, EntityType } from '@shared/models/entity-type.models';
+import { FileType, ImportWidgetResult, JSON_TYPE, WidgetsBundleItem, ZIP_TYPE, TXT_TYPE, BulkImportRequest, BulkImportResult } from './import-export.models';
+import { EntityType } from '@shared/models/entity-type.models';
 import { UtilsService } from '@core/services/utils.service';
 import { WidgetService } from '@core/http/widget.service';
 import { NULL_UUID } from '@shared/models/id/has-uuid';
@@ -544,7 +544,7 @@ export class ImportExportService {
     const csvContent = this.arrayToCsv(allRows);
     const blob = new Blob([csvContent], {type: 'text/csv'});
     const filename = widget.widget.config.title || 'widget-data';
-    this.downloadFile(blob, filename, CSV_TYPE);
+    this.downloadFile(blob, filename, TXT_TYPE);
   }
 
   private getExportData(defaultSubscription) {
@@ -591,8 +591,8 @@ export class ImportExportService {
   private getHeader(defaultSubscription) {
     if (isDefined(defaultSubscription.datasources)) {
       const header = ['"timestamp"'];
-      defaultSubscription.datasources[0].dataKeys.forEach(dataKey => header.push('"' + dataKey.name + '"'));
-      header.push('"__source__"');
+      defaultSubscription.datasources[0].dataKeys.forEach(dataKey => header.push('"' + dataKey.label + '"'));
+      header.push('"__device__"');
       return header;
     }
     return defaultSubscription.alarmSource.dataKeys.map(dataKey => '"' + dataKey.name + '"');
