@@ -22,6 +22,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import lombok.extern.slf4j.Slf4j;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -138,14 +139,17 @@ public class BaseTimeseriesService implements TimeseriesService {
             throw new IncorrectParameterException("Key value entry can't be null");
         }
         List<ListenableFuture<Integer>> futures = Lists.newArrayListWithExpectedSize(INSERTS_PER_ENTRY);
-        saveAndRegisterFutures(tenantId, futures, entityId, tsKvEntry, 0L);
+        if (tsKvEntry.isPersistent()) {
+            saveAndRegisterFutures(tenantId, futures, entityId, tsKvEntry, 0L);
+        }
         return Futures.transform(Futures.allAsList(futures), SUM_ALL_INTEGERS, MoreExecutors.directExecutor());
     }
 
     @Override
     public ListenableFuture<Integer> save(TenantId tenantId, EntityId entityId, List<TsKvEntry> tsKvEntries, long ttl) {
-        List<ListenableFuture<Integer>> futures = Lists.newArrayListWithExpectedSize(tsKvEntries.size() * INSERTS_PER_ENTRY);
-        for (TsKvEntry tsKvEntry : tsKvEntries) {
+        List<TsKvEntry> persistentEntries = getPersistentEntries(tsKvEntries);
+        List<ListenableFuture<Integer>> futures = Lists.newArrayListWithExpectedSize(persistentEntries.size() * INSERTS_PER_ENTRY);
+        for (TsKvEntry tsKvEntry : persistentEntries) {
             if (tsKvEntry == null) {
                 throw new IncorrectParameterException("Key value entry can't be null");
             }
@@ -161,9 +165,12 @@ public class BaseTimeseriesService implements TimeseriesService {
             if (tsKvEntry == null) {
                 throw new IncorrectParameterException("Key value entry can't be null");
             }
-            futures.add(timeseriesLatestDao.saveLatest(tenantId, entityId, tsKvEntry));
         }
         return Futures.allAsList(futures);
+    }
+
+    private List<TsKvEntry> getPersistentEntries(List<TsKvEntry> tsKvEntries) {
+        return tsKvEntries.stream().filter(TsKvEntry::isPersistent).collect(Collectors.toList());
     }
 
     private void saveAndRegisterFutures(TenantId tenantId, List<ListenableFuture<Integer>> futures, EntityId entityId, TsKvEntry tsKvEntry, long ttl) {

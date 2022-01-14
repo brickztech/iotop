@@ -25,6 +25,8 @@ import java.util.Optional;
  */
 public interface KvEntry extends Serializable {
 
+    public static final String KEY_DISPLAY_ONLY = "DO_";
+
     String getKey();
 
     DataType getDataType();
@@ -42,4 +44,8 @@ public interface KvEntry extends Serializable {
     String getValueAsString();
 
     Object getValue();
+
+    default boolean isPersistent() {
+        return !getKey().startsWith(KEY_DISPLAY_ONLY);
+    }
 }
