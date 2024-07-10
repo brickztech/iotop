@@ -36,4 +36,5 @@ java -cp ${jarfile} $JAVA_OPTS -Dloader.main=org.thingsboard.server.ThingsboardS
                     -Dlogging.config=${CONF_FOLDER}/logback.xml \
                     org.springframework.boot.loader.PropertiesLauncher
 
+echo "Stopping ThingsBoard ..."
 stop-db.sh
