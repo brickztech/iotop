@@ -50,7 +50,7 @@ export class HomeComponent extends PageComponent implements AfterViewInit, OnIni
   sidenavMode: 'over' | 'push' | 'side' = 'side';
   sidenavOpened = true;
 
-  logo = 'assets/polifoam.png';
+  logo = 'assets/logo/logo.png';
 
   @ViewChild('sidenav')
   sidenav: MatSidenav;
