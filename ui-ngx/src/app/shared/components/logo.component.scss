@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 :host-context(.login-logo) {
-  img.tb-logo-title {
-    width: 280px;
+  img.tb-logo {
+    width: 60px;
     height: 60px;
     text-decoration: none;
     cursor: pointer;
@@ -25,5 +25,16 @@
     &:focus {
       outline: 0;
     }
+  }
+
+  span.tb-logo-title {
+    display: inline-block;
+    padding-left: 15px;
+    font-size: 3em;
+  }
+
+  div.box {
+    display: flex;
+    align-items: center;
   }
 }
