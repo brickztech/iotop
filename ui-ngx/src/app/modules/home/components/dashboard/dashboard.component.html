@@ -82,7 +82,8 @@
           [isRemoveActionEnabled]="isRemoveActionEnabled"
           [disableWidgetInteraction]="disableWidgetInteraction"
           (widgetFullscreenChanged)="onWidgetFullscreenChanged($event)"
-          (widgetComponentAction)="onWidgetComponentAction($event, widget)">
+          (widgetComponentAction)="onWidgetComponentAction($event, widget)"
+          (exportWidgetDataAction)="onExportWidgetData($event)">
         </tb-widget-container>
       </gridster-item>
     </gridster>

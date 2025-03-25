@@ -236,6 +236,7 @@ export class WidgetConfigComponent extends PageComponent implements OnInit, OnDe
       showTitle: [null, []],
       dropShadow: [null, []],
       enableFullscreen: [null, []],
+      enableDataExport: [null, []],
       backgroundColor: [null, []],
       color: [null, []],
       padding: [null, []],
@@ -514,6 +515,7 @@ export class WidgetConfigComponent extends PageComponent implements OnInit, OnDe
           showTitle: displayWidgetTitle,
           dropShadow: isDefined(config.dropShadow) ? config.dropShadow : true,
           enableFullscreen: isDefined(config.enableFullscreen) ? config.enableFullscreen : true,
+          enableDataExport: isDefined(config.enableDataExport) ? config.enableDataExport : false,
           backgroundColor: config.backgroundColor,
           color: config.color,
           padding: config.padding,
@@ -1026,6 +1028,10 @@ export class WidgetConfigComponent extends PageComponent implements OnInit, OnDe
       }
     }
     return null;
+  }
+
+  isDataExportVisible() {
+    return ['timeseries', 'alarm'].includes(this.widgetType);
   }
 
 }

@@ -293,6 +293,7 @@ export class WidgetContext {
   latestData?: Array<DatasourceData>;
   hiddenData?: Array<{data: DataSet}>;
   timeWindow?: WidgetTimewindow;
+  getExportData?: any;
 
   embedTitlePanel?: boolean;
   overflowVisible?: boolean;
@@ -496,6 +497,7 @@ export class WidgetContext {
              status: AlarmStatus, fetchOriginator: boolean, assigneeId: UserId) {
     return new AlarmQuery(entityId, pageLink, searchStatus, status, fetchOriginator, assigneeId);
   }
+
 }
 
 export class LabelVariablePattern {

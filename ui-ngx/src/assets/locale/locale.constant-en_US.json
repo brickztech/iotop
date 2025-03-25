@@ -5485,7 +5485,8 @@
         "filter": "Widget filter type",
         "loading-widgets": "Loading widgets...",
         "widget-template-error": "Invalid widget HTML template.",
-        "reference": "Reference"
+        "reference": "Reference",
+        "export-data": "Export widget data"
     },
     "widget-action": {
         "header-button": "Widget header button",
@@ -5699,7 +5700,8 @@
         "layout": "Layout",
         "resize-options": "Resize options",
         "resizable": "Resizable",
-        "preserve-aspect-ratio": "Preserve aspect ratio"
+        "preserve-aspect-ratio": "Preserve aspect ratio",
+        "enable-data-export": "Enable data export"
     },
     "widget-type": {
         "import": "Import widget type",

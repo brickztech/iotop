@@ -123,6 +123,9 @@ export class WidgetContainerComponent extends PageComponent implements OnInit, O
   @Output()
   widgetComponentAction: EventEmitter<WidgetComponentAction> = new EventEmitter<WidgetComponentAction>();
 
+  @Output()
+  exportWidgetDataAction: EventEmitter<DashboardWidget> = new EventEmitter<DashboardWidget>();
+
   hovered = false;
   isReferenceWidget = false;
 
@@ -271,6 +274,10 @@ export class WidgetContainerComponent extends PageComponent implements OnInit, O
       event,
       actionType: WidgetComponentActionType.REMOVE
     });
+  }
+
+  onExportDataClicked() {
+    this.exportWidgetDataAction.emit(this.widget);
   }
 
   updateEditWidgetActionsTooltipState() {

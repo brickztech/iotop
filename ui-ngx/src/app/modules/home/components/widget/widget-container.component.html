@@ -55,6 +55,14 @@
       </button>
       <button mat-icon-button
               type="button"
+              [class.!hidden]="isEdit || !widget.enableDataExport"
+              (click)="onExportDataClicked()"
+              matTooltip="{{ 'widget.export-data' | translate }}"
+              matTooltipPosition="above">
+        <tb-icon>save</tb-icon>
+      </button>
+      <button mat-icon-button
+              type="button"
               [class.!hidden]="isEdit || !widget.enableFullscreen"
               (click)="$event.stopPropagation(); widget.isFullscreen = !widget.isFullscreen; updateEditWidgetActionsTooltipState()"
               matTooltip="{{(widget.isFullscreen ? 'fullscreen.exit' : 'fullscreen.expand') | translate}}"

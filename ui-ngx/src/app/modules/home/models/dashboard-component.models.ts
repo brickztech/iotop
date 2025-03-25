@@ -370,6 +370,7 @@ export class DashboardWidget implements GridsterItem, IDashboardWidget {
 
   dropShadow: boolean;
   enableFullscreen: boolean;
+  enableDataExport: boolean;
 
   hasTimewindow: boolean;
 
@@ -613,6 +614,7 @@ export class DashboardWidget implements GridsterItem, IDashboardWidget {
     }
     this.dropShadow = isDefined(this.widget.config.dropShadow) ? this.widget.config.dropShadow : true;
     this.enableFullscreen = isDefined(this.widget.config.enableFullscreen) ? this.widget.config.enableFullscreen : true;
+    this.enableDataExport = isDefined(this.widget.config.enableDataExport) ? this.widget.config.enableDataExport : false;
 
     let canHaveTimewindow = false;
     let onlyQuickInterval = false;

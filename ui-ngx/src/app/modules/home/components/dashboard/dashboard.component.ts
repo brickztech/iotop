@@ -61,6 +61,7 @@ import { TbPopoverComponent } from '@shared/components/popover.component';
 import { displayGrids } from 'angular-gridster2/lib/gridsterConfig.interface';
 import { coerceBoolean } from '@shared/decorators/coercion';
 import { TbContextMenuEvent } from '@shared/models/jquery-event.models';
+import { ImportExportService } from '@shared/import-export/import-export.service';
 
 @Component({
   selector: 'tb-dashboard',
@@ -212,6 +213,7 @@ export class DashboardComponent extends PageComponent implements IDashboardCompo
   constructor(protected store: Store<AppState>,
               public utils: UtilsService,
               private timeService: TimeService,
+              private exportService: ImportExportService,
               private breakpointObserver: BreakpointObserver,
               private differs: IterableDiffers,
               private kvDiffers: KeyValueDiffers,
@@ -503,6 +505,12 @@ export class DashboardComponent extends PageComponent implements IDashboardCompo
       ).subscribe((widgetTitle) => {
         this.callbacks.onExportWidget($event, widget.widget, widgetTitle);
       });
+    }
+  }
+
+  onExportWidgetData(widget: DashboardWidget) {
+    if (widget.widget.config.enableDataExport) {
+       this.exportService.exportWidgetData(widget);
     }
   }
 
