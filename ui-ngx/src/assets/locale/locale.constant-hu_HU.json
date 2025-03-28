@@ -4459,7 +4459,8 @@
         "search": "Search tenants",
         "selected-tenants": "{ count, plural, =1 {1 tenant} other {# tenants} } selected",
         "isolated-tb-rule-engine": "Use isolated IoToP Rule Engine queues",
-        "isolated-tb-rule-engine-details": "Each tenant will have dedicated Rule Engine queues"
+        "isolated-tb-rule-engine-details": "Each tenant will have dedicated Rule Engine queues",
+        "logo": "ALklamazás logo"
     },
     "tenant-profile": {
         "tenant-profile": "Tenant profile",

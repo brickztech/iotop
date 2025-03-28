@@ -210,3 +210,7 @@ export const extractParamsFromJSResourceUrl = (url: string): {type: ResourceType
 export const isBase64DataImageUrl = (url: string): boolean => url && url.startsWith(IMAGE_BASE64_URL_PREFIX);
 
 export const NO_IMAGE_DATA_URI = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+
+export interface TenantLogo {
+  url: string;
+}

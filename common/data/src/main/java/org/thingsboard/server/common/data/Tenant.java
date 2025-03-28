@@ -46,6 +46,10 @@ public class Tenant extends ContactBased<TenantId> implements HasTenantId, HasTi
     private TenantProfileId tenantProfileId;
 
     @Getter @Setter
+    @Schema(description = "URL of the logo image.")
+    private String image;
+
+    @Getter @Setter
     private Long version;
 
     public Tenant() {
@@ -62,6 +66,7 @@ public class Tenant extends ContactBased<TenantId> implements HasTenantId, HasTi
         this.region = tenant.getRegion();
         this.tenantProfileId = tenant.getTenantProfileId();
         this.version = tenant.getVersion();
+        this.image = tenant.getImage();
     }
 
     public String getTitle() {
@@ -179,6 +184,8 @@ public class Tenant extends ContactBased<TenantId> implements HasTenantId, HasTi
         builder.append(region);
         builder.append(", tenantProfileId=");
         builder.append(tenantProfileId);
+        builder.append(", image=");
+        builder.append(image);
         builder.append(", additionalInfo=");
         builder.append(getAdditionalInfo());
         builder.append(", country=");

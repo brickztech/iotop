@@ -52,9 +52,12 @@ import org.thingsboard.server.common.data.page.PageData;
 import org.thingsboard.server.common.data.page.PageLink;
 import org.thingsboard.server.common.data.security.Authority;
 import org.thingsboard.server.common.data.util.ThrowingSupplier;
+import org.thingsboard.server.common.data.Tenant;
+import org.thingsboard.server.common.data.TbTenantLogo;
 import org.thingsboard.server.dao.resource.ImageCacheKey;
 import org.thingsboard.server.dao.resource.ImageService;
 import org.thingsboard.server.dao.service.validator.ResourceDataValidator;
+import org.thingsboard.server.dao.tenant.TenantService;
 import org.thingsboard.server.queue.util.TbCoreComponent;
 import org.thingsboard.server.service.resource.TbImageService;
 import org.thingsboard.server.service.security.model.SecurityUser;
@@ -83,6 +86,7 @@ public class ImageController extends BaseController {
     private final ImageService imageService;
     private final TbImageService tbImageService;
     private final ResourceDataValidator resourceValidator;
+    private final TenantService tenantService;
 
     @Value("${cache.image.systemImagesBrowserTtlInMinutes:0}")
     private int systemImagesBrowserTtlInMinutes;
@@ -272,6 +276,18 @@ public class ImageController extends BaseController {
         TbResourceInfo imageInfo = checkImageInfo(type, key, Operation.DELETE);
         TbImageDeleteResult result = tbImageService.delete(imageInfo, getCurrentUser(), force);
         return (result.isSuccess() ? ResponseEntity.ok() : ResponseEntity.badRequest()).body(result);
+    }
+
+    @GetMapping(value = "/api/images/tenant/logo")
+    public ResponseEntity<TbTenantLogo> getTenantLogoImage() {
+        try {
+            TenantId tenantId = getTenantId();
+            Tenant tenant = tenantService.findTenantById(tenantId);
+            String url = (tenant != null && tenant.getImage() != null) ? tenant.getImage() : "";
+            return ResponseEntity.ok(new TbTenantLogo(url));
+        } catch (ThingsboardException e) {
+            return ResponseEntity.ok(new TbTenantLogo(""));
+        }
     }
 
     private ResponseEntity<ByteArrayResource> downloadIfChanged(String type, String key, String etag, String acceptEncodingHeader, boolean preview) throws Exception {

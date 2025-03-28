@@ -72,6 +72,9 @@ public abstract class AbstractTenantEntity<T extends Tenant> extends BaseVersion
     @Column(name = ModelConstants.TENANT_TENANT_PROFILE_ID_PROPERTY, columnDefinition = "uuid")
     private UUID tenantProfileId;
 
+    @Column(name = ModelConstants.TENANT_IMAGE_PROPERTY)
+    private String image;
+
     public AbstractTenantEntity() {
         super();
     }
@@ -92,6 +95,7 @@ public abstract class AbstractTenantEntity<T extends Tenant> extends BaseVersion
         if (tenant.getTenantProfileId() != null) {
             this.tenantProfileId = tenant.getTenantProfileId().getId();
         }
+        this.image = tenant.getImage();
     }
 
     public AbstractTenantEntity(TenantEntity tenantEntity) {
@@ -108,6 +112,7 @@ public abstract class AbstractTenantEntity<T extends Tenant> extends BaseVersion
         this.email = tenantEntity.getEmail();
         this.additionalInfo = tenantEntity.getAdditionalInfo();
         this.tenantProfileId = tenantEntity.getTenantProfileId();
+        this.image = tenantEntity.getImage();
     }
 
     protected Tenant toTenant() {
@@ -128,6 +133,7 @@ public abstract class AbstractTenantEntity<T extends Tenant> extends BaseVersion
         if (tenantProfileId != null) {
             tenant.setTenantProfileId(new TenantProfileId(tenantProfileId));
         }
+        tenant.setImage(image);
         return tenant;
     }
 
