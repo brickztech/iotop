@@ -159,18 +159,22 @@ public class BaseTimeseriesService implements TimeseriesService {
     public ListenableFuture<Integer> save(TenantId tenantId, EntityId entityId, TsKvEntry tsKvEntry) {
         validate(entityId);
         List<ListenableFuture<Integer>> futures = new ArrayList<>(INSERTS_PER_ENTRY);
-        saveAndRegisterFutures(tenantId, futures, entityId, tsKvEntry, 0L);
+        if (tsKvEntry.isPersistent()) {
+            saveAndRegisterFutures(tenantId, futures, entityId, tsKvEntry, 0L);
+        }
         return Futures.transform(Futures.allAsList(futures), SUM_ALL_INTEGERS, MoreExecutors.directExecutor());
     }
 
     @Override
     public ListenableFuture<Integer> save(TenantId tenantId, EntityId entityId, List<TsKvEntry> tsKvEntries, long ttl) {
-        return doSave(tenantId, entityId, tsKvEntries, ttl, true);
+        List<TsKvEntry> persistentEntries = getPersistentEntries(tsKvEntries);
+        return doSave(tenantId, entityId, persistentEntries, ttl, true);
     }
 
     @Override
     public ListenableFuture<Integer> saveWithoutLatest(TenantId tenantId, EntityId entityId, List<TsKvEntry> tsKvEntries, long ttl) {
-        return doSave(tenantId, entityId, tsKvEntries, ttl, false);
+        List<TsKvEntry> persistentEntries = getPersistentEntries(tsKvEntries);
+        return doSave(tenantId, entityId, persistentEntries, ttl, false);
     }
 
     private ListenableFuture<Integer> doSave(TenantId tenantId, EntityId entityId, List<TsKvEntry> tsKvEntries, long ttl, boolean saveLatest) {
@@ -193,6 +197,10 @@ public class BaseTimeseriesService implements TimeseriesService {
             futures.add(timeseriesLatestDao.saveLatest(tenantId, entityId, tsKvEntry));
         }
         return Futures.allAsList(futures);
+    }
+
+    private List<TsKvEntry> getPersistentEntries(List<TsKvEntry> tsKvEntries) {
+        return tsKvEntries.stream().filter(TsKvEntry::isPersistent).collect(Collectors.toList());
     }
 
     private void saveAndRegisterFutures(TenantId tenantId, List<ListenableFuture<Integer>> futures, EntityId entityId, TsKvEntry tsKvEntry, long ttl) {

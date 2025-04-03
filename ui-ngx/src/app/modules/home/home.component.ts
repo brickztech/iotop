@@ -34,6 +34,8 @@ import { RouterTabsComponent } from '@home/components/router-tabs.component';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { isDefined, isDefinedAndNotNull } from '@core/utils';
+import { ImageService } from '@app/core/public-api';
+import { removeTbImagePrefix } from '@app/shared/public-api';
 
 @Component({
   selector: 'tb-home',
@@ -52,7 +54,7 @@ export class HomeComponent extends PageComponent implements AfterViewInit, OnIni
   sidenavMode: 'over' | 'push' | 'side' = 'side';
   sidenavOpened = true;
 
-  logo = 'assets/logo_title_white.svg';
+  logo = '';
 
   @ViewChild('sidenav')
   sidenav: MatSidenav;
@@ -73,7 +75,9 @@ export class HomeComponent extends PageComponent implements AfterViewInit, OnIni
               @Inject(WINDOW) private window: Window,
               private activeComponentService: ActiveComponentService,
               private fb: FormBuilder,
-              public breakpointObserver: BreakpointObserver) {
+              private imageService: ImageService,
+              public breakpointObserver: BreakpointObserver
+            ) {
     super(store);
   }
 
@@ -96,7 +100,15 @@ export class HomeComponent extends PageComponent implements AfterViewInit, OnIni
           }
         }
       );
-  }
+
+      this.imageService.getTenantLogo().subscribe(image => {
+        if (image.url != "") {
+          this.logo = removeTbImagePrefix(image.url);
+        } else {
+          this.logo = 'assets/logo_white.svg';
+        }
+      });
+    }
 
   ngOnDestroy() {
     this.destroy$.next();

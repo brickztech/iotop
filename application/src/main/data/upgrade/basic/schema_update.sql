@@ -14,3 +14,5 @@
 -- limitations under the License.
 --
 
+ALTER TABLE public.tenant
+    ADD COLUMN IF NOT EXISTS image character varying(500);

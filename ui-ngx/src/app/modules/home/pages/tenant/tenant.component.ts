@@ -55,6 +55,7 @@ export class TenantComponent extends ContactBasedComponent<TenantInfo> {
     return this.fb.group(
       {
         title: [entity ? entity.title : '', [Validators.required, Validators.maxLength(255)]],
+        image: [entity ? entity.image : ''],
         tenantProfileId: [entity ? entity.tenantProfileId : null, [Validators.required]],
         additionalInfo: this.fb.group(
           {
@@ -70,6 +71,7 @@ export class TenantComponent extends ContactBasedComponent<TenantInfo> {
 
   updateEntityForm(entity: Tenant) {
     this.entityForm.patchValue({title: entity.title});
+    this.entityForm.patchValue({image: entity.image});
     this.entityForm.patchValue({tenantProfileId: entity.tenantProfileId});
     this.entityForm.patchValue({additionalInfo: {description: entity.additionalInfo ? entity.additionalInfo.description : ''}});
     this.entityForm.patchValue({additionalInfo:

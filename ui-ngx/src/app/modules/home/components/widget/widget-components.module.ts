@@ -88,6 +88,7 @@ import {
 import { EllipsisChipListDirective } from '@shared/directives/ellipsis-chip-list.directive';
 import { ScadaSymbolWidgetComponent } from '@home/components/widget/lib/scada/scada-symbol-widget.component';
 import { TwoSegmentButtonWidgetComponent } from '@home/components/widget/lib/button/two-segment-button-widget.component';
+import { IframeWidgetIotopComponent } from './lib/iframe-widget-iotop/iframe-widget-iotop.component';
 
 @NgModule({
   declarations: [
@@ -141,7 +142,8 @@ import { TwoSegmentButtonWidgetComponent } from '@home/components/widget/lib/but
     LabelValueCardWidgetComponent,
     UnreadNotificationWidgetComponent,
     NotificationTypeFilterPanelComponent,
-    ScadaSymbolWidgetComponent
+    ScadaSymbolWidgetComponent,
+    IframeWidgetIotopComponent
   ],
   imports: [
     CommonModule,
@@ -202,7 +204,8 @@ import { TwoSegmentButtonWidgetComponent } from '@home/components/widget/lib/but
     LabelValueCardWidgetComponent,
     UnreadNotificationWidgetComponent,
     NotificationTypeFilterPanelComponent,
-    ScadaSymbolWidgetComponent
+    ScadaSymbolWidgetComponent,
+    IframeWidgetIotopComponent
   ],
   providers: [
     {provide: WIDGET_COMPONENTS_MODULE_TOKEN, useValue: WidgetComponentsModule},

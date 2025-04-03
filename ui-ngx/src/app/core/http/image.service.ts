@@ -29,7 +29,8 @@ import {
   isImageResourceUrl,
   NO_IMAGE_DATA_URI,
   removeTbImagePrefix,
-  ResourceSubType
+  ResourceSubType,
+  TenantLogo
 } from '@shared/models/resource.models';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
@@ -189,6 +190,10 @@ export class ImageService {
   public importImage(imageData: ImageExportData, config?: RequestConfig): Observable<ImageResourceInfo> {
     return this.http.put<ImageResourceInfo>('/api/image/import',
       imageData, defaultHttpOptionsFromConfig(config));
+  }
+
+  public getTenantLogo(): Observable<TenantLogo> {
+    return this.http.get<TenantLogo>('/api/images/tenant/logo');
   }
 
 }
