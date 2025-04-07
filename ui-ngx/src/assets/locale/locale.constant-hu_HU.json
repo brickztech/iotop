@@ -7766,7 +7766,7 @@
             "circle-click": "Kör kattintás",
             "tooltip-tag-action": "Tooltip tag akció",
             "node-selected": "Csomópont kiválasztásakor",
-            "element-click": "HTML elem kattintásakor",
+            "element-click": "HTML elem kattintás",
             "pie-slice-click": "Szelet kattintás",
             "row-double-click": "Soron dupla kattintás",
             "cell-double-click": "Cellán dupla kattintás",
@@ -7775,7 +7775,7 @@
         }
     },
     "paginator": {
-        "items-per-page": "Elemek per oldal:",
+        "items-per-page": "Elem per oldal:",
         "first-page-label": "Első oldal",
         "last-page-label": "Utolsó oldal",
         "next-page-label": "Következő oldal",
