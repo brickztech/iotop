@@ -16,6 +16,12 @@
 
 FROM thingsboard/openjdk17:bookworm-slim
 
+RUN --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
+    --mount=target=/var/cache/apt,type=cache,sharing=locked \
+    rm -f /etc/apt/apt.conf.d/docker-clean && \
+    apt-get update && \
+    apt-get -y --no-install-recommends install netcat-traditional
+
 COPY start-tb-node.sh ${pkg.name}.deb /tmp/
 
 RUN chmod a+x /tmp/*.sh \
