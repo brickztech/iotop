@@ -4,5 +4,4 @@
  _/ /   / /_/ /    / /    / /_/ /  / ____/
 /___/   \____/    /_/     \____/  /_/
 
-${application.title} ${application.version}
-Powered by Spring Boot ${spring-boot.version}
+IoToP ${application.version}, powered by Spring Boot ${spring-boot.version}
